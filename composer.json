@@ -1,0 +1,27 @@
+{
+    "name": "van-ons/filament-seo",
+    "description": "Adds SEO functionality to Filament",
+    "authors": [
+        {
+            "name": "Maurice Wijnia",
+            "email": "maurice@van-ons.nl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "VanOns\\FilamentSeo\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "VanOns\\FilamentSeo\\ServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^11.0",
+        "filament/filament": "^3.2"
+    }
+}
