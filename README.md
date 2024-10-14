@@ -11,7 +11,7 @@ This package is not published on packagist.org, you must add it to your
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/VanOns/filament-cms"
+            "url": "https://github.com/VanOns/filament-seo"
         }
     ],
 ```
