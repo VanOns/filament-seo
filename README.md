@@ -83,3 +83,11 @@ Filament\Forms\Components\Tabs::make()
         Filament\Forms\Components\Tabs\Tab::make('seo')->schema(App\Models\Page::getSeoFields()),
     ]),
 ```
+
+### Add the view to your layout
+
+To make the SEO data available, add the blade component to your app's layout file:
+
+```blade
+<x-filament-seo::head />
+```
