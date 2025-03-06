@@ -13,7 +13,7 @@ class NoIndex
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! app()->isProduction() || config('seo.indexable', false)) {
+        if (! app()->isProduction() || config('seo.no-index', false)) {
             $response = $next($request);
             $response->headers->set('X-Robots-Tag', 'none');
 

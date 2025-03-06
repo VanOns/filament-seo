@@ -34,5 +34,5 @@ return [
     /**
      * Toggle search engine indexing
      */
-    'indexable' => env('APP_SEO_INDEXABLE', false),
+    'no-index' => env('APP_SEO_NO_INDEX', false),
 ];

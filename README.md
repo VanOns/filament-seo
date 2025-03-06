@@ -137,12 +137,14 @@ required.
 
 The middleware can be found in `VanOns\FilamentSeo\Http\Middleware\NoIndex.php`.
 
-The following checks are done before adding the [X-Robots-Tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Robots-Tag) with value `none`:
+The following checks are done before adding the
+[X-Robots-Tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Robots-Tag)
+with value `none`:
 
 - Your `APP_ENV` is not equal to `production`.
-- The config value `seo.indexable` is not `true`, derived from `env('APP_SEO_INDEXABLE', false)`.
+- The config value `seo.no-index` is false, derived from `env(APP_SEO_NO_INDEX)`,
 
-This should ensure that only your production website will ever be indexed, unless
-you change the value yourself.
+This should ensure non-production websites are never indexed.
 
-To completely disable the no-index header, add `APP_SEO_INDEXABLE = true` to your `.env` file.
+To discourage search engine indexing on production, add `APP_SEO_NO_INDEX = true`
+to your `.env` file, or change the value in the `config/seo.php` config file.
