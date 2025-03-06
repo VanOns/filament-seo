@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 class NoIndex
 {
     /**
+     * The tag is always added for non-prod sites.
+     * For production sites, it can be turned on in the config.
+     *
      * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response

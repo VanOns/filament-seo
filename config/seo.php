@@ -32,7 +32,7 @@ return [
         'pagination_parameters' => ['page'],
     ],
     /**
-     * Toggle search engine indexing
+     * Toggle search engine indexing on production.
      */
     'no-index' => env('APP_SEO_NO_INDEX', false),
 ];
