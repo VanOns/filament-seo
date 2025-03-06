@@ -29,6 +29,10 @@ return [
     */
     'canonical' => [
         'parameters' => [],
-        'pagination_parameters' => ['page']
+        'pagination_parameters' => ['page'],
     ],
+    /**
+     * Toggle search engine indexing
+     */
+    'indexable' => env('APP_SEO_INDEXABLE', false),
 ];
