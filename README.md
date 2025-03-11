@@ -91,3 +91,40 @@ To make the SEO data available, add the blade component to your app's layout fil
 ```blade
 <x-filament-seo::head />
 ```
+
+### Load SEO data for your views
+
+In order for the model's seo data to be show on a page, you must load it while
+routing.
+
+This can be done in two ways:
+
+1. Use the `VanOns\FilamentSeo\Attributes\Seoable` attribute and give it
+the class to load.
+2. Load the `VanOns\FilamentSeo\SeoService` and call the `setSeoAble()` method
+with the object to load the SEO attribute for.
+
+```php
+namespace App\Http\Controllers;
+
+use App\Models\Page;
+use Illuminate\View\View;
+use VanOns\FilamentSeo\Attributes\Seoable;
+use VanOns\FilamentSeo\SeoService;
+
+class ShowPage extends Controller
+{
+    //option 1
+    #[Seoable(Page::class)]
+    public function show(Page $page): View
+    {
+        //option 2
+        app(SeoService::class)->setSeoable($page);
+
+        return view('page.show', [
+            'page' => $page,
+        ]);
+    }
+}
+
+```
