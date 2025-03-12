@@ -128,3 +128,23 @@ class ShowPage extends Controller
 }
 
 ```
+
+### Middleware
+
+This package comes with middleware to prevent indexing by search engines for
+non-production sites. The middleware is automatically loaded, no extra steps are
+required.
+
+The middleware can be found in `VanOns\FilamentSeo\Http\Middleware\NoIndex.php`.
+
+The following checks are done before adding the
+[X-Robots-Tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Robots-Tag)
+with value `none`:
+
+- Your `APP_ENV` is not equal to `production`.
+- The config value `seo.no-index` is false, derived from `env(APP_SEO_NO_INDEX)`,
+
+This should ensure non-production websites are never indexed.
+
+To discourage search engine indexing on production, add `APP_SEO_NO_INDEX = true`
+to your `.env` file, or change the value in the `config/seo.php` config file.

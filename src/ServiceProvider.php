@@ -2,10 +2,12 @@
 
 namespace VanOns\FilamentSeo;
 
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Blade;
 use VanOns\FilamentSeo\Contracts\ResourceSchema as ResourceSchemaContract;
 use VanOns\FilamentSeo\Contracts\SeoSettings;
 use VanOns\FilamentSeo\FormSchemas\ResourceSchema;
+use VanOns\FilamentSeo\Http\Middleware\NoIndex;
 use VanOns\FilamentSeo\Settings\ConfigSettingsDriver;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -15,6 +17,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->registerComponents();
+        $this->registerGlobalMiddleware();
     }
 
     public function register(): void
@@ -47,5 +50,12 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function registerComponents(): void
     {
         Blade::componentNamespace('VanOns\\FilamentSeo\\Components', 'filament-seo');
+    }
+
+    public function registerGlobalMiddleware(): void
+    {
+        $kernel = app()->make(Kernel::class);
+
+        $kernel->pushMiddleware(NoIndex::class);
     }
 }
