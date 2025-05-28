@@ -62,7 +62,7 @@ trait HasSeoFields
 
     public function getSeoCanonical(): ?string
     {
-        return match(Arr::get($this, static::$seoPrefix . 'canonical')) {
+        return match (Arr::get($this, static::$seoPrefix . 'canonical')) {
             'url' => Arr::get($this, static::$seoPrefix . 'canonical_url'),
             default => null,
         };

@@ -19,11 +19,11 @@ class FallbackMap implements Seoable
         $url = request()->url();
 
         $params = collect(config('seo.canonical.parameters'))->mapWithKeys(
-            fn($p) => [$p => request($p)]
+            fn ($p) => [$p => request($p)]
         );
 
         $pagination = collect(config('seo.canonical.pagination_parameters'))->mapWithKeys(
-            fn($p) => [$p => request($p) === '1' ? null : request($p)]
+            fn ($p) => [$p => request($p) === '1' ? null : request($p)]
         );
 
         $query = http_build_query($params->merge($pagination)->toArray());

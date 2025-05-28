@@ -15,8 +15,7 @@ class SeoService
 
     public Seoable $seoable;
 
-    public function __construct(protected SeoSettings $settings, protected SeoableRepository $repository)
-    {}
+    public function __construct(protected SeoSettings $settings, protected SeoableRepository $repository) {}
 
     public function setSeoable(Seoable $seoable): void
     {
@@ -75,7 +74,7 @@ class SeoService
             $data['og:description'] = $ogDescription;
         }
 
-        if($ogImage = $this->seoable->getSeoOgImage()) {
+        if ($ogImage = $this->seoable->getSeoOgImage()) {
             $data['og:image'] = $ogImage->url;
             $data['og:image:type'] = $ogImage->mimeType;
             $data['og:image:width'] = $ogImage->width;
@@ -94,7 +93,7 @@ class SeoService
             $data['twitter:image'] = $twitterImage->url;
         }
 
-        if($twitterCard = $this->seoable->getSeoTwitterCard()) {
+        if ($twitterCard = $this->seoable->getSeoTwitterCard()) {
             $data['twitter:card'] = $twitterCard;
         }
 

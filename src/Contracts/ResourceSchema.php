@@ -2,4 +2,6 @@
 
 namespace VanOns\FilamentSeo\Contracts;
 
-interface ResourceSchema extends Schema {}
+interface ResourceSchema extends Schema
+{
+}

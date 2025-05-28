@@ -8,7 +8,7 @@ use Attribute;
 class Seoable
 {
     public function __construct(
-        public string $model,
+        public string  $model,
         public ?string $parameter = null,
         public ?string $column = null
     ) {}

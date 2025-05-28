@@ -12,7 +12,7 @@ class Head extends Component
     public function render(): View
     {
         return view('filament-seo::components.head', [
-            'service' => app(SeoService::class)
+            'service' => app(SeoService::class),
         ]);
     }
 }

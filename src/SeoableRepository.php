@@ -2,11 +2,11 @@
 
 namespace VanOns\FilamentSeo;
 
-use VanOns\FilamentSeo\Contracts\Seoable;
 use Illuminate\Routing\Route;
 use ReflectionException;
 use ReflectionMethod;
 use Throwable;
+use VanOns\FilamentSeo\Contracts\Seoable;
 
 class SeoableRepository
 {

@@ -63,7 +63,7 @@ class ResourceSchema implements ResourceSchemaContract
             ->helperText(__('The preferred version of a set of pages with highly similar content'))
             ->options([
                 null => __('This page'),
-                'url' => __('Custom URL')
+                'url' => __('Custom URL'),
             ])
             ->selectablePlaceholder(false)
             ->live();
@@ -74,7 +74,7 @@ class ResourceSchema implements ResourceSchemaContract
         return TextInput::make(static::$seoPrefix . 'canonical_url')
             ->label(__('Custom URL'))
             ->placeholder(__('https://example.com/page'))
-            ->hidden(fn(Get $get) => $get(static::$seoPrefix . 'canonical') !== 'url');
+            ->hidden(fn (Get $get) => $get(static::$seoPrefix . 'canonical') !== 'url');
     }
 
     public function ogTitleField(): Field
@@ -146,25 +146,25 @@ class ResourceSchema implements ResourceSchemaContract
             Section::make(__('Basic'))->schema([
                 $this->titleField(),
                 $this->descriptionField(),
-                $this->keywordsField()
+                $this->keywordsField(),
             ]),
             Section::make(__('Advanced'))->schema([
                 Group::make([
                     $this->noIndexField(),
-                    $this->noFollowField()
+                    $this->noFollowField(),
                 ])->columns(2),
                 $this->canonicalField(),
-                $this->canonicalUrlField()
+                $this->canonicalUrlField(),
             ]),
             Section::make(__('Social'))->description(__('Open Graph meta data for sharing on social platforms.'))->schema([
                 $this->ogTitleField(),
                 $this->ogDescriptionField(),
-                $this->ogImageField()
+                $this->ogImageField(),
             ]),
             Section::make(__('Sitemap'))->schema([
                 $this->changeFrequencyField(),
-                $this->priorityField()
-            ])
+                $this->priorityField(),
+            ]),
         ];
     }
 }
