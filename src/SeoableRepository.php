@@ -13,7 +13,8 @@ class SeoableRepository
     public function getSeoable(): Seoable
     {
         try {
-            if ($seoable = $this->getSeoableFromAttribute(request()->route())) {
+            $route = request()->route();
+            if ($route instanceof Route && $seoable = $this->getSeoableFromAttribute($route)) {
                 return $seoable;
             }
         } catch (Throwable $e) {
