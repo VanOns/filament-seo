@@ -1,8 +1,23 @@
 # Filament SEO
 
-Filament SEO is a package that provides a simple way to manage SEO tags for your Laravel application. It is built on top of the Filament Admin package and provides a simple way to manage SEO tags for your Laravel application.
+Filament SEO is a package that provides a simple way to manage SEO tags for your Laravel application. It is built on top
+of the Filament Admin package and provides a simple way to manage SEO tags for your Laravel application.
 
-## Installation
+## Quick start
+
+### Compatibility
+
+For certain Filament versions, changes have to be made that render the package backwards incompatible with the previous version.
+Please see the table below to determine which version you need.
+
+| Version                                                       | Filament |
+|---------------------------------------------------------------|----------|
+| v2 (current)                                                  | \>=4.0   |
+| [v1](https://github.com/VanOns/filament-seo/tree/releases/v1) | <4.0     |
+
+**Please note:** the `main` branch will always be the latest major version.
+
+### Installation
 
 This package is not published on packagist.org, you must add it to your
 `composer.json` as a repository manually:
@@ -94,7 +109,7 @@ To make the SEO data available, add the blade component to your app's layout fil
 
 ### Load SEO data for your views
 
-In order for the model's seo data to be show on a page, you must load it while
+In order for the model's seo data to be shown on a page, you must load it while
 routing.
 
 This can be done in two ways:

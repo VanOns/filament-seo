@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'settings' => [
         'driver' => 'config', // config, database
         'config' => [
@@ -12,6 +13,7 @@ return [
     ],
 
     'fallback' => \VanOns\FilamentSeo\Maps\FallbackMap::class,
+
     /*
     |--------------------------------------------------------------------------
     | Canonical Settings
@@ -23,16 +25,18 @@ return [
     | The parameters to include in the Canonical URL
     |
     | 'pagination_parameters'
-    |  The pagination parameters to include in the Canonical URL
-    |  This also handles some edge cases that are relevant for pagination
+    | The pagination parameters to include in the Canonical URL
+    | This also handles some edge cases that are relevant for pagination
     |
     */
     'canonical' => [
         'parameters' => [],
         'pagination_parameters' => ['page'],
     ],
+
     /**
      * Toggle search engine indexing on production.
      */
     'no-index' => env('APP_SEO_NO_INDEX', false),
+
 ];
