@@ -4,7 +4,6 @@
  */
 @endphp
 
-
 <title>@yield('seo.title', $service->title())</title>
 
 @if($ogTitle = \Illuminate\Support\Facades\View::getSection('seo.og:title', $service->ogTitle()))
