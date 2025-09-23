@@ -1,6 +1,6 @@
 {
     "name": "van-ons/filament-seo",
-    "description": "Adds SEO functionality to Filament",
+    "description": "Add SEO functionality to Filament.",
     "authors": [
         {
             "name": "Maurice Wijnia",
@@ -21,7 +21,7 @@
     },
     "require": {
         "php": ">=8.2",
-        "laravel/framework": ">=10.0",
-        "filament/filament": ">=3.2"
+        "filament/filament": "^3.2",
+        "laravel/framework": ">=10.0"
     }
 }
