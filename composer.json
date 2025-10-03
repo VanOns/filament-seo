@@ -1,12 +1,24 @@
 {
     "name": "van-ons/filament-seo",
     "description": "Add SEO functionality to Filament.",
+    "keywords": [
+        "filament",
+        "seo"
+    ],
+    "type": "library",
+    "homepage": "https://github.com/VanOns/filament-seo",
+    "license": "MIT",
     "authors": [
         {
             "name": "Maurice Wijnia",
             "email": "maurice@van-ons.nl"
         }
     ],
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^4.0",
+        "laravel/framework": "^11.0|^12.0"
+    },
     "autoload": {
         "psr-4": {
             "VanOns\\FilamentSeo\\": "src/"
@@ -15,13 +27,13 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VanOns\\FilamentSeo\\ServiceProvider"
+                "VanOns\\FilamentSeo\\FilamentSeoServiceProvider"
             ]
         }
     },
-    "require": {
-        "php": ">=8.2",
-        "filament/filament": "^4.0",
-        "laravel/framework": ">=11.0"
-    }
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

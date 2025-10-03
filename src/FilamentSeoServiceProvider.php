@@ -10,7 +10,7 @@ use VanOns\FilamentSeo\FormSchemas\ResourceSchema;
 use VanOns\FilamentSeo\Http\Middleware\NoIndex;
 use VanOns\FilamentSeo\Settings\ConfigSettingsDriver;
 
-class ServiceProvider extends \Illuminate\Support\ServiceProvider
+class FilamentSeoServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     public function boot(): void
     {
