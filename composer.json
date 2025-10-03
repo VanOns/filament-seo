@@ -5,6 +5,7 @@
         "filament",
         "seo"
     ],
+    "type": "library",
     "homepage": "https://github.com/VanOns/filament-seo",
     "license": "MIT",
     "authors": [
