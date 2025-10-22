@@ -98,8 +98,8 @@ class ResourceSchema implements ResourceSchemaContract
             ->imageResizeMode('cover')
             ->imageEditor()
             ->imageCropAspectRatio('1200:630')
-            ->imageResizeTargetWidth(1200)
-            ->imageResizeTargetHeight(630)
+            ->imageResizeTargetWidth('1200')
+            ->imageResizeTargetHeight('630')
             ->image()
             ->disk('public')
             ->directory('social-images');
@@ -127,16 +127,16 @@ class ResourceSchema implements ResourceSchemaContract
             ->label(__('Priority'))
             ->helperText(__('The priority of this URL relative to other URLs on your site'))
             ->options([
-                '0.1' => 0.1,
-                '0.2' => 0.2,
-                '0.3' => 0.3,
-                '0.4' => 0.4,
-                '0.5' => 0.5,
-                '0.6' => 0.6,
-                '0.7' => 0.7,
-                '0.8' => 0.8,
-                '0.9' => 0.9,
-                '1.0' => 1.0,
+                '0.1' => '0.1',
+                '0.2' => '0.2',
+                '0.3' => '0.3',
+                '0.4' => '0.4',
+                '0.5' => '0.5',
+                '0.6' => '0.6',
+                '0.7' => '0.7',
+                '0.8' => '0.8',
+                '0.9' => '0.9',
+                '1.0' => '1.0',
             ]);
     }
 
