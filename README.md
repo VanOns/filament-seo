@@ -19,16 +19,21 @@ Please see the table below to determine which version you need.
 
 ### Installation
 
-This package is not published on packagist.org, you must add it to your
-`composer.json` as a repository manually:
+Because this package is not published to Packagist, you need to add it as a repository in your `composer.json` file:
 
 ```json
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/VanOns/filament-seo"
-        }
-    ],
+"repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/VanOns/filament-seo"
+    }
+]
+```
+
+Then, require the package:
+
+```bash
+composer require van-ons/filament-seo:^2.0
 ```
 
 ### Model preparation
