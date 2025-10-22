@@ -33,7 +33,7 @@ Because this package is not published to Packagist, you need to add it as a repo
 Then, require the package:
 
 ```bash
-composer require van-ons/filament-seo:^2.0
+composer require van-ons/filament-seo:^1.0
 ```
 
 ### Model preparation
