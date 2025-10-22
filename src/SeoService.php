@@ -15,7 +15,9 @@ class SeoService
 
     public Seoable $seoable;
 
-    public function __construct(protected SeoSettings $settings, protected SeoableRepository $repository) {}
+    public function __construct(protected SeoSettings $settings, protected SeoableRepository $repository)
+    {
+    }
 
     public function setSeoable(Seoable $seoable): void
     {
@@ -150,12 +152,12 @@ class SeoService
                     $name = $tag['name'] ?? $tag['property'] ?? null;
 
                     return '<meta ' . collect($tag)->map(function ($value, $key) use ($name) {
-                            if ($key === 'content') {
-                                $value = View::getSection("seo.{$name}", $value);
-                            }
+                        if ($key === 'content') {
+                            $value = View::getSection("seo.{$name}", $value);
+                        }
 
-                            return $key . '="' . $value . '"';
-                        })->implode(' ') . '>';
+                        return $key . '="' . $value . '"';
+                    })->implode(' ') . '>';
                 })
                 ->implode("\n")
         );
