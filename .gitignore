@@ -1,4 +1,6 @@
-.idea
-.vscode
-vendor
+.idea/
+.vscode/
+vendor/
+.DS_Store
+.php-cs-fixer.cache
 composer.lock
