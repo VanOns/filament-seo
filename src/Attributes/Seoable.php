@@ -11,5 +11,6 @@ class Seoable
         public string  $model,
         public ?string $parameter = null,
         public ?string $column = null
-    ) {}
+    ) {
+    }
 }

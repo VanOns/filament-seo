@@ -8,7 +8,6 @@ use VanOns\FilamentSeo\SeoService;
 
 class Head extends Component
 {
-
     public function render(): View
     {
         return view('filament-seo::components.head', [
