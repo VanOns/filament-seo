@@ -10,25 +10,30 @@ of the Filament Admin package and provides a simple way to manage SEO tags for y
 For certain Filament versions, changes have to be made that render the package backwards incompatible with the previous version.
 Please see the table below to determine which version you need.
 
-| Version                                                       | Filament |
-|---------------------------------------------------------------|----------|
-| v2 (current)                                                  | \>=4.0   |
-| [v1](https://github.com/VanOns/filament-seo/tree/releases/v1) | <4.0     |
+| Version                                                      | Filament |
+|--------------------------------------------------------------|----------|
+| v2 (current)                                                 | \>=4.0   |
+| [v1](https://github.com/VanOns/filament-seo/tree/release/v1) | <4.0     |
 
 **Please note:** the `main` branch will always be the latest major version.
 
 ### Installation
 
-This package is not published on packagist.org, you must add it to your
-`composer.json` as a repository manually:
+Because this package is not published to Packagist, you need to add it as a repository in your `composer.json` file:
 
 ```json
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/VanOns/filament-seo"
-        }
-    ],
+"repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/VanOns/filament-seo"
+    }
+]
+```
+
+Then, require the package:
+
+```bash
+composer require van-ons/filament-seo:^2.0
 ```
 
 ### Model preparation
