@@ -11,7 +11,9 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Illuminate\Database\Eloquent\Model;
 use VanOns\FilamentSeo\Contracts\ResourceSchema as ResourceSchemaContract;
+use VanOns\FilamentSeo\Contracts\Seoable;
 
 class ResourceSchema implements ResourceSchemaContract
 {
@@ -25,14 +27,28 @@ class ResourceSchema implements ResourceSchemaContract
         return TextInput::make(static::$seoPrefix . 'title')
             ->label(__('Page title'))
             ->helperText(__('A title for the page, max 70 characters including the site name'))
-            ->suffix($titleSeparater . ' ' . $title);
+            ->suffix($titleSeparater . ' ' . $title)
+            ->placeholder(function (?Model $record) {
+                if (!$record instanceof Seoable) {
+                    return null;
+                }
+
+                return $record->getSeoTitle()[0] ?? null;
+            });
     }
 
     public function descriptionField(): Field
     {
         return Textarea::make(static::$seoPrefix . 'description')
             ->label(__('Description'))
-            ->helperText(__('A short description of the content, max 160 characters'));
+            ->helperText(__('A short description of the content, max 160 characters'))
+            ->placeholder(function (?Model $record) {
+                if (!$record instanceof Seoable) {
+                    return null;
+                }
+
+                return $record->getSeoDescription();
+            });
     }
 
     public function keywordsField(): Field
@@ -81,14 +97,28 @@ class ResourceSchema implements ResourceSchemaContract
     {
         return TextInput::make(static::$seoPrefix . 'og_title')
             ->label(__('Social Title'))
-            ->helperText(__('A title for the page, max 70 characters'));
+            ->helperText(__('A title for the page, max 70 characters'))
+            ->placeholder(function (?Model $record) {
+                if (!$record instanceof Seoable) {
+                    return null;
+                }
+
+                return $record->getSeoOgTitle()[0] ?? null;
+            });
     }
 
     public function ogDescriptionField(): Field
     {
         return Textarea::make(static::$seoPrefix . 'og_description')
             ->label(__('Social Description'))
-            ->helperText(__('A short description of the content, max 160 characters'));
+            ->helperText(__('A short description of the content, max 160 characters'))
+            ->placeholder(function (?Model $record) {
+                if (!$record instanceof Seoable) {
+                    return null;
+                }
+
+                return $record->getSeoOgDescription();
+            });
     }
 
     public function ogImageField(): Field
