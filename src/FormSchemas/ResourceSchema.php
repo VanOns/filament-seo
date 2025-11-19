@@ -2,18 +2,26 @@
 
 namespace VanOns\FilamentSeo\FormSchemas;
 
+use Closure;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Resources\Pages\CreateRecord;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Component;
+use VanOns\FilamentSeo\Analysis\Analysers\DescriptionLength;
+use VanOns\FilamentSeo\Analysis\Analysers\TitleLength;
 use VanOns\FilamentSeo\Contracts\ResourceSchema as ResourceSchemaContract;
 use VanOns\FilamentSeo\Contracts\Seoable;
+use VanOns\FilamentSeo\Fields\SeoDescriptionInput;
+use VanOns\FilamentSeo\Fields\SeoTitleInput;
+use VanOns\FilamentSeo\Schemas\Analysis;
 
 class ResourceSchema implements ResourceSchemaContract
 {
@@ -21,41 +29,16 @@ class ResourceSchema implements ResourceSchemaContract
 
     public function titleField(): Field
     {
-        $titleSeparater = '-';
-        $title = config('app.name');
-
-        return TextInput::make(static::$seoPrefix . 'title')
-            ->label(__('Page title'))
-            ->helperText(__('A title for the page, max 70 characters including the site name'))
-            ->suffix($titleSeparater . ' ' . $title)
-            ->placeholder(function (?Model $record) {
-                if (!$record instanceof Seoable) {
-                    return null;
-                }
-
-                return $record->getSeoTitle()[0] ?? null;
-            });
+        return SeoTitleInput::make(static::$seoPrefix . 'title')
+            ->maxRecommendedLength(70)
+            ->label(__('Page title'));
     }
 
     public function descriptionField(): Field
     {
-        return Textarea::make(static::$seoPrefix . 'description')
-            ->label(__('Description'))
-            ->helperText(__('A short description of the content, max 160 characters'))
-            ->placeholder(function (?Model $record) {
-                if (!$record instanceof Seoable) {
-                    return null;
-                }
-
-                return $record->getSeoDescription();
-            });
-    }
-
-    public function keywordsField(): Field
-    {
-        return Textarea::make(static::$seoPrefix . 'keywords')
-            ->label(__('Keywords'))
-            ->helperText(__('The keywords for the page, comma separated'));
+        return SeoDescriptionInput::make(static::$seoPrefix . 'description')
+            ->maxRecommendedLength(160)
+            ->label(__('Description'));
     }
 
     public function noIndexField(): Field
@@ -95,23 +78,16 @@ class ResourceSchema implements ResourceSchemaContract
 
     public function ogTitleField(): Field
     {
-        return TextInput::make(static::$seoPrefix . 'og_title')
-            ->label(__('Social Title'))
-            ->helperText(__('A title for the page, max 70 characters'))
-            ->placeholder(function (?Model $record) {
-                if (!$record instanceof Seoable) {
-                    return null;
-                }
-
-                return $record->getSeoOgTitle()[0] ?? null;
-            });
+        return SeoTitleInput::make(static::$seoPrefix . 'og_title')
+            ->maxRecommendedLength(70)
+            ->label(__('Social Title'));
     }
 
     public function ogDescriptionField(): Field
     {
-        return Textarea::make(static::$seoPrefix . 'og_description')
+        return SeoDescriptionInput::make(static::$seoPrefix . 'og_description')
+            ->maxRecommendedLength(160)
             ->label(__('Social Description'))
-            ->helperText(__('A short description of the content, max 160 characters'))
             ->placeholder(function (?Model $record) {
                 if (!$record instanceof Seoable) {
                     return null;
@@ -170,30 +146,65 @@ class ResourceSchema implements ResourceSchemaContract
             ]);
     }
 
+    public function focusKeyphraseField(): Field
+    {
+        return TextInput::make(static::$seoPrefix . 'focus_keyphrase')
+            ->label(__('Focus Keyphrase'))
+            ->helperText(__('The main keyphrase you want this page to rank for'));
+    }
+
+    public function analysisSchema(?Model $record, Get $get, string $operation, Component $livewire): ?Analysis
+    {
+        if ($operation === 'create' && $livewire instanceof CreateRecord) {
+            $record = new ($livewire->getModel());
+        }
+
+        if (!$record instanceof Seoable) {
+            return null;
+        }
+
+        /**
+         * @var Model&Seoable $record
+         */
+        return Analysis::make()->analysers([
+            TitleLength::class,
+            DescriptionLength::class,
+        ])->seoable(
+            $record->replicate()->fill($get())
+        );
+    }
+
     public function schema(): array
     {
         return [
-            Section::make(__('Basic'))->schema([
-                $this->titleField(),
-                $this->descriptionField(),
-                $this->keywordsField(),
-            ]),
-            Section::make(__('Advanced'))->schema([
-                Group::make([
-                    $this->noIndexField(),
-                    $this->noFollowField(),
-                ])->columns(2),
-                $this->canonicalField(),
-                $this->canonicalUrlField(),
-            ]),
-            Section::make(__('Social'))->description(__('Open Graph meta data for sharing on social platforms.'))->schema([
-                $this->ogTitleField(),
-                $this->ogDescriptionField(),
-                $this->ogImageField(),
-            ]),
-            Section::make(__('Sitemap'))->schema([
-                $this->changeFrequencyField(),
-                $this->priorityField(),
+            Grid::make(3)->schema([
+                Section::make()->schema([
+                    Section::make(__('Basic'))->schema([
+                        $this->focusKeyphraseField(),
+                        $this->titleField(),
+                        $this->descriptionField(),
+                    ]),
+                    Section::make(__('Advanced'))->schema([
+                        Group::make([
+                            $this->noIndexField(),
+                            $this->noFollowField(),
+                        ])->columns(2),
+                        $this->canonicalField(),
+                        $this->canonicalUrlField(),
+                    ]),
+                    Section::make(__('Social'))->description(__('Open Graph meta data for sharing on social platforms.'))->schema([
+                        $this->ogTitleField(),
+                        $this->ogDescriptionField(),
+                        $this->ogImageField(),
+                    ]),
+                    Section::make(__('Sitemap'))->schema([
+                        $this->changeFrequencyField(),
+                        $this->priorityField(),
+                    ]),
+                ])
+                    ->contained(false)
+                    ->columnSpan(2),
+                Section::make(__('Analysis'))->schema($this->analysisSchema(...)),
             ]),
         ];
     }
