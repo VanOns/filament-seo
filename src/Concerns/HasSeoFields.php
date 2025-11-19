@@ -12,6 +12,11 @@ trait HasSeoFields
 
     public static string $seoPrefix = 'seo.';
 
+    public function getFocusKeyphrase(): ?string
+    {
+        return Arr::get($this, static::$seoPrefix . 'focus_keyphrase');
+    }
+
     public static function getDefaultSeoTitleField(): string
     {
         return 'title';

@@ -6,6 +6,11 @@ use VanOns\FilamentSeo\SeoImage;
 
 trait HasSeoGetters
 {
+    public function getFocusKeyphrase(): ?string
+    {
+        return null;
+    }
+
     public function getSeoDescription(): ?string
     {
         return null;

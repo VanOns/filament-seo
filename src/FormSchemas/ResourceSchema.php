@@ -16,6 +16,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 use VanOns\FilamentSeo\Analysis\Analysers\DescriptionLength;
+use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseLength;
 use VanOns\FilamentSeo\Analysis\Analysers\TitleLength;
 use VanOns\FilamentSeo\Contracts\ResourceSchema as ResourceSchemaContract;
 use VanOns\FilamentSeo\Contracts\Seoable;
@@ -150,7 +151,8 @@ class ResourceSchema implements ResourceSchemaContract
     {
         return TextInput::make(static::$seoPrefix . 'focus_keyphrase')
             ->label(__('Focus Keyphrase'))
-            ->helperText(__('The main keyphrase you want this page to rank for'));
+            ->helperText(__('The main keyphrase you want this page to rank for'))
+            ->live();
     }
 
     public function analysisSchema(?Model $record, Get $get, string $operation, Component $livewire): ?Analysis
@@ -167,6 +169,7 @@ class ResourceSchema implements ResourceSchemaContract
          * @var Model&Seoable $record
          */
         return Analysis::make()->analysers([
+            FocusKeyphraseLength::class,
             TitleLength::class,
             DescriptionLength::class,
         ])->seoable(
