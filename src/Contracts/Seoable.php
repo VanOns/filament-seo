@@ -2,10 +2,13 @@
 
 namespace VanOns\FilamentSeo\Contracts;
 
+use VanOns\FilamentSeo\Analysis\AnalyserInterface;
 use VanOns\FilamentSeo\SeoImage;
 
 interface Seoable extends HasUrl
 {
+    public function getUrl(): ?string;
+
     public function getFocusKeyphrase(): ?string;
     public function getSeoTitle(): array;
 
@@ -36,4 +39,9 @@ interface Seoable extends HasUrl
     public function getSeoPriority(): ?string;
 
     public function getSeoLastModified(): ?string;
+
+    /**
+     * @return array<AnalyserInterface>
+     */
+    public function getSeoAnalysers(): array;
 }

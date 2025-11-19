@@ -79,6 +79,6 @@ class RecommendedLength extends Schema
     protected function text()
     {
         $length = strlen($this->subject);
-        return Text::make("{$length} / {$this->maxRecommendedLength} tekens");
+        return Text::make(__('filament-seo::seo.count_characters', ['count' => "{$length} / {$this->maxRecommendedLength}"]));
     }
 }

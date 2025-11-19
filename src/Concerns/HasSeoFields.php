@@ -3,6 +3,7 @@
 namespace VanOns\FilamentSeo\Concerns;
 
 use Illuminate\Support\Arr;
+use VanOns\FilamentSeo\Facades\AnalyserRegistry;
 use VanOns\FilamentSeo\FormSchemas\ResourceSchema;
 use VanOns\FilamentSeo\SeoImage;
 
@@ -114,6 +115,11 @@ trait HasSeoFields
     public function getSeoLastModified(): ?string
     {
         return Arr::get($this, 'updated_at')?->format('Y-m-d');
+    }
+
+    public function getSeoAnalysers(): array
+    {
+        return AnalyserRegistry::getAnalysers();
     }
 
     public static function getSeoFields(): array

@@ -18,10 +18,10 @@ class FocusKeyphraseLength implements AnalyserInterface
         $words = Str::wordCount($record->getFocusKeyphrase());
 
         return match(true) {
-            $words === 0 => new AnalysisResult(AnalysisStatus::FAILED, __('The focus keyphrase is missing')),
-            $words > 0 && $words <= $this->words => new AnalysisResult(AnalysisStatus::PASSED, __('The focus keyphrase length is correct')),
-            $words > $this->words && $words <= $this->words * 2 => new AnalysisResult(AnalysisStatus::WARNING, __('The focus keyphrase is longer than :count words', ['count' => $this->words])),
-            default => new AnalysisResult(AnalysisStatus::FAILED, __('The focus keyphrase is much longer than :count words', ['count' => $this->words])),
+            $words === 0 => new AnalysisResult(AnalysisStatus::FAILED, __('filament-seo::seo.focus_keyphrase.missing')),
+            $words > 0 && $words <= $this->words => new AnalysisResult(AnalysisStatus::PASSED, __('filament-seo::seo.focus_keyphrase.length_correct')),
+            $words > $this->words && $words <= $this->words * 2 => new AnalysisResult(AnalysisStatus::WARNING, __('filament-seo::seo.focus_keyphrase.length_long', ['count' => $this->words])),
+            default => new AnalysisResult(AnalysisStatus::FAILED, __('filament-seo::seo.focus_keyphrase.length_very_long', ['count' => $this->words])),
         };
     }
 }
