@@ -19,18 +19,23 @@ class SeoDescriptionInput extends Textarea
 
         $this->live()
             ->belowContent(function (?string $state, Get $get) {
+                $subject = $state;
+
+                if (!$subject && $this->fallbackField) {
+                    $subject = $get($this->fallbackField);
+                }
+
                 return RecommendedLength::make()
                     ->maxRecommendedLength($this->maxRecommendedLength)
-                    ->subject($state ?: $get($this->fallbackField));
+                    ->subject($subject);
+            })
+            ->placeholder(function (Get $get) {
+                if (!$this->fallbackField) {
+                    return null;
+                }
+
+                return $get($this->fallbackField);
             });
-
-        $this->placeholder(function (Get $get) {
-            if (!$this->fallbackField) {
-                return null;
-            }
-
-            return $get($this->fallbackField);
-        });
     }
 
     public function fallbackField(?string $field): static
