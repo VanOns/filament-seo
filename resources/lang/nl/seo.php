@@ -65,4 +65,6 @@ return [
         'never' => 'Nooit',
     ],
     'count_characters' => ':count tekens',
+    'use_ai' => 'Gebruik AI',
+    'ai_generation_completed' => 'AI-generatie voltooid',
 ];

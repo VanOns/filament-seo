@@ -2,18 +2,26 @@
 
 namespace VanOns\FilamentSeo\FormSchemas;
 
+use Closure;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use Prism\Prism\Structured\Response;
+use VanOns\FilamentSeo\Actions\GenerateMetadata;
+use VanOns\FilamentSeo\AI\Prompts\GenerateDescription;
+use VanOns\FilamentSeo\AI\Prompts\GeneratePageTitle;
+use VanOns\FilamentSeo\AI\Prompts\Prompt;
 use VanOns\FilamentSeo\Contracts\ResourceSchema as ResourceSchemaContract;
 use VanOns\FilamentSeo\Contracts\Seoable;
 use VanOns\FilamentSeo\Fields\SeoDescriptionInput;
@@ -28,14 +36,16 @@ class ResourceSchema implements ResourceSchemaContract
     {
         return SeoTitleInput::make(static::$seoPrefix . 'title')
             ->maxRecommendedLength(70)
-            ->label(__('filament-seo::seo.page_title.label'));
+            ->label(__('filament-seo::seo.page_title.label'))
+            ->afterLabel($this->generateMetadataAction(new GeneratePageTitle()));
     }
 
     public function descriptionField(): Field
     {
         return SeoDescriptionInput::make(static::$seoPrefix . 'description')
             ->maxRecommendedLength(160)
-            ->label(__('filament-seo::seo.description.label'));
+            ->label(__('filament-seo::seo.description.label'))
+            ->afterLabel($this->generateMetadataAction(new GenerateDescription()));
     }
 
     public function noIndexField(): Field
@@ -151,7 +161,14 @@ class ResourceSchema implements ResourceSchemaContract
             ->live();
     }
 
-    public function analysisSchema(?Model $record, Get $get, string $operation, Component $livewire): ?Analysis
+    /**
+     * @param Model|null $record
+     * @param Get $get
+     * @param string $operation
+     * @param Component $livewire
+     * @return (Model&Seoable)|null
+     */
+    protected function getRecord(?Model $record, Get $get, string $operation, Component $livewire): ?Model
     {
         if ($operation === 'create' && $livewire instanceof CreateRecord) {
             $record = new ($livewire->getModel());
@@ -161,14 +178,40 @@ class ResourceSchema implements ResourceSchemaContract
             return null;
         }
 
+        /** @var Model&Seoable $record */
         $clone = clone $record;
 
-        /**
-         * @var Model&Seoable $clone
-         */
+        return $clone->fill($get());
+    }
+
+    public function analysisSchema(?Model $record, Get $get, string $operation, Component $livewire): ?Analysis
+    {
+        $record = $this->getRecord($record, $get, $operation, $livewire);
+
         return Analysis::make()
-            ->analysers($clone->getSeoAnalysers())
-            ->seoable($clone->fill($get()));
+            ->analysers($record->getSeoAnalysers())
+            ->seoable($record);
+    }
+
+    public function generateMetadataAction(Prompt $prompt): Closure
+    {
+        return function (Field $component, ?Model $record, Get $get, Set $set, string $operation, Component $livewire) use ($prompt) {
+            $record = $this->getRecord($record, $get, $operation, $livewire);
+
+            return GenerateMetadata::make('generate_metadata_' . $component->getName())
+                ->seoable($record)
+                ->prompt($prompt)
+                ->onResponse(function (?Response $response) use ($set, $component) {
+                    if ($output = $response->structured['output'] ?? null) {
+                        $set($component->getName(), $output);
+                    }
+
+                    Notification::make()
+                        ->title(__('filament-seo::seo.ai_generation_completed'))
+                        ->success()
+                        ->send();
+                });
+        };
     }
 
     public function schema(): array

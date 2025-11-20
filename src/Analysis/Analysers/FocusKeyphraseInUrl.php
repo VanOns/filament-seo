@@ -12,7 +12,7 @@ class FocusKeyphraseInUrl implements AnalyserInterface
 {
     public function analyse(Seoable $record): ?AnalysisResult
     {
-        $url = $record->getUrl();
+        $url = $record->url();
         $focusKeyphrase = Str::slug($record->getFocusKeyphrase() ?? null);
 
         return match (true) {

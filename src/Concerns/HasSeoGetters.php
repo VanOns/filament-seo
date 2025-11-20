@@ -87,6 +87,11 @@ trait HasSeoGetters
         return null;
     }
 
+    public function getSeoContent(): ?string
+    {
+        return null;
+    }
+
     public function getSeoAnalysers(): array
     {
         return [];

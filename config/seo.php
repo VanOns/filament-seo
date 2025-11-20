@@ -71,4 +71,10 @@ return [
             FocusKeyPhraseUnique::class,
         ],
     ],
+
+    'ai' => [
+        'enabled' => env('SEO_AI_ENABLED', false),
+        'provider' => env('SEO_AI_PROVIDER', 'openai'),
+        'model' => env('SEO_AI_MODEL', 'gpt-4o'),
+    ],
 ];

@@ -65,4 +65,6 @@ return [
         'never' => 'Never',
     ],
     'count_characters' => ':count characters',
+    'use_ai' => 'Use AI',
+    'ai_generation_completed' => 'AI generation completed',
 ];
