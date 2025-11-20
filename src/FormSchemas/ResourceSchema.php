@@ -87,7 +87,8 @@ class ResourceSchema implements ResourceSchemaContract
     {
         return SeoTitleInput::make(static::$seoPrefix . 'og_title')
             ->maxRecommendedLength(70)
-            ->label(__('filament-seo::seo.social_title'));
+            ->label(__('filament-seo::seo.social_title'))
+            ->fallbackField(static::$seoPrefix . 'title');
     }
 
     public function ogDescriptionField(): Field
@@ -95,13 +96,7 @@ class ResourceSchema implements ResourceSchemaContract
         return SeoDescriptionInput::make(static::$seoPrefix . 'og_description')
             ->maxRecommendedLength(160)
             ->label(__('filament-seo::seo.social_description'))
-            ->placeholder(function (?Model $record) {
-                if (!$record instanceof Seoable) {
-                    return null;
-                }
-
-                return $record->getSeoOgDescription();
-            });
+            ->fallbackField(static::$seoPrefix . 'description');
     }
 
     public function ogImageField(): Field
