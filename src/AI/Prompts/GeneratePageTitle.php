@@ -34,10 +34,17 @@ class GeneratePageTitle extends Prompt
 
     public function userPrompt(): string
     {
+        $focusKeyphrase = $this->seoable->getFocusKeyphrase() ?? 'none';
+        $title = $this->seoable->getSeoTitle()[0] ?? 'Untitled';
+        $content = $this->seoable->getSeoContent();
+
         return <<< EOT
-        Focus Keyphrase: {$this->seoable->getFocusKeyphrase()}
+        Focus Keyphrase:
+        {$focusKeyphrase}
+        Title:
+        {$title}
         Content:
-        {$this->seoable->getSeoContent()}
+        {$content}
         EOT;
     }
 }
