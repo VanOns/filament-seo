@@ -2,6 +2,7 @@
 
 use VanOns\FilamentSeo\Analysis\Analysers\DescriptionLength;
 use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseInDescription;
+use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseInContent;
 use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseInTitle;
 use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseInUrl;
 use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseLength;
@@ -67,6 +68,7 @@ return [
             FocusKeyphraseLength::class,
             FocusKeyphraseInTitle::class,
             FocusKeyphraseInDescription::class,
+            FocusKeyphraseInContent::class,
             FocusKeyphraseInUrl::class,
             FocusKeyPhraseUnique::class,
         ],
