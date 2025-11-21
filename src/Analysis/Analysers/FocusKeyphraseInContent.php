@@ -36,11 +36,11 @@ class FocusKeyphraseInContent implements AnalyserInterface
                 AnalysisStatus::FAILED,
                 __('filament-seo::seo.focus_keyphrase.not_in_content')
             ),
-            $focusKeyphrase && $count < $min => new AnalysisResult(
+            $count < $min => new AnalysisResult(
                 AnalysisStatus::FAILED,
                 __('filament-seo::seo.focus_keyphrase.not_enough_in_content', ['count' => $count, 'recommended' => $min])
             ),
-            $focusKeyphrase && $count > $max => new AnalysisResult(
+            $count > $max => new AnalysisResult(
                 AnalysisStatus::FAILED,
                 __('filament-seo::seo.focus_keyphrase.too_much_in_content', ['count' => $count, 'recommended' => $max])
             ),

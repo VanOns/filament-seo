@@ -14,6 +14,10 @@ return [
         'length_bit_too_long' => 'The title length is a bit too long',
         'length_too_long' => 'The title length is too long',
     ],
+    'content' => [
+        'length_too_short' => 'The content length is shorter than :recommended words',
+        'length_correct' => 'The content length is :recommended words or longer',
+    ],
     'description' => [
         'label' => 'Description',
         'missing' => 'The description is missing',

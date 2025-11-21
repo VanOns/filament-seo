@@ -14,6 +14,10 @@ return [
         'length_bit_too_long' => 'De titel is iets te lang',
         'length_too_long' => 'De titel is te lang',
     ],
+    'content' => [
+        'length_too_short' => 'De contentlengte is korter dan :recommended woorden',
+        'length_correct' => 'De contentlengte is :recommended woorden of langer',
+    ],
     'description' => [
         'label' => 'Beschrijving',
         'missing' => 'De beschrijving ontbreekt',

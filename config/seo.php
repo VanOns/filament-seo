@@ -8,6 +8,7 @@ use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseInUrl;
 use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseLength;
 use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyPhraseUnique;
 use VanOns\FilamentSeo\Analysis\Analysers\TitleLength;
+use VanOns\FilamentSeo\Analysis\Analysers\ContentLength;
 
 return [
 
@@ -65,6 +66,7 @@ return [
         'default_analysers' => [
             TitleLength::class,
             DescriptionLength::class,
+            ContentLength::class,
             FocusKeyphraseLength::class,
             FocusKeyphraseInContent::class,
             FocusKeyphraseInTitle::class,
