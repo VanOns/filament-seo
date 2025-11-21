@@ -32,7 +32,7 @@ class FocusKeyphraseInContent implements AnalyserInterface
 
         return match (true) {
             !$content => null,
-            $focusKeyphrase && $count === 0 => new AnalysisResult(
+            !$focusKeyphrase || $count === 0 => new AnalysisResult(
                 AnalysisStatus::FAILED,
                 __('filament-seo::seo.focus_keyphrase.not_in_content')
             ),
