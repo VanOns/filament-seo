@@ -35,12 +35,8 @@ class FocusKeyphraseInDescription implements AnalyserInterface
     {
         $words = explode(' ', $focusKeyphrase);
 
-        foreach ($words as $word) {
-            if (!str_contains($description, $word)) {
-                return false;
-            }
-        }
-
-        return true;
+        return collect($words)->every(function ($word) use ($description) {
+            return str_contains($description, $word);
+        });
     }
 }
