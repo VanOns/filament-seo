@@ -4,5 +4,5 @@ namespace VanOns\FilamentSeo\Contracts;
 
 interface HasUrl
 {
-    public function url(): string;
+    public function url(): ?string;
 }

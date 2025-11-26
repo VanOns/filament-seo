@@ -6,7 +6,7 @@ use VanOns\FilamentSeo\SeoImage;
 
 trait HasSeoGetters
 {
-    public function getUrl(): ?string
+    public function url(): ?string
     {
         return null;
     }
