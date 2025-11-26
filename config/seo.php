@@ -91,4 +91,17 @@ return [
         'provider' => env('SEO_AI_PROVIDER', 'openai'),
         'model' => env('SEO_AI_MODEL', 'gpt-4o'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Analysis Settings
+    |--------------------------------------------------------------------------
+    |
+    | Set the default SEO analysis settings.
+    |
+    */
+    'sitemap' => [
+        'routes_enabled' => env('SEO_SITEMAP_ENABLED', true),
+        'cache_ttl' => 3600,
+    ],
 ];

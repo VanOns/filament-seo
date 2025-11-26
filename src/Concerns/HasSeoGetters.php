@@ -3,6 +3,7 @@
 namespace VanOns\FilamentSeo\Concerns;
 
 use VanOns\FilamentSeo\SeoImage;
+use VanOns\FilamentSeo\Sitemap\SitemapUrl;
 
 trait HasSeoGetters
 {
@@ -77,12 +78,17 @@ trait HasSeoGetters
         return null;
     }
 
-    public function getSeoPriority(): ?string
+    public function getSeoPriority(): ?float
     {
         return null;
     }
 
     public function getSeoLastModified(): ?string
+    {
+        return null;
+    }
+
+    public function getSeoSitemap(): ?SitemapUrl
     {
         return null;
     }
