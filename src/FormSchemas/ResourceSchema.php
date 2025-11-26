@@ -37,7 +37,11 @@ class ResourceSchema implements ResourceSchemaContract
         return SeoTitleInput::make(static::$seoPrefix . 'title')
             ->maxRecommendedLength(70)
             ->label(__('filament-seo::seo.page_title.label'))
-            ->afterLabel($this->generateMetadataAction(new GeneratePageTitle()));
+            ->afterLabel(
+                config('seo.ai.enabled', false)
+                    ? $this->generateMetadataAction(new GeneratePageTitle())
+                    : null
+            );
     }
 
     public function descriptionField(): Field
@@ -45,7 +49,11 @@ class ResourceSchema implements ResourceSchemaContract
         return SeoDescriptionInput::make(static::$seoPrefix . 'description')
             ->maxRecommendedLength(160)
             ->label(__('filament-seo::seo.description.label'))
-            ->afterLabel($this->generateMetadataAction(new GenerateDescription()));
+            ->afterLabel(
+                config('seo.ai.enabled', false)
+                    ? $this->generateMetadataAction(new GenerateDescription())
+                    : null
+            );
     }
 
     public function noIndexField(): Field

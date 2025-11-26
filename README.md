@@ -149,6 +149,81 @@ class ShowPage extends Controller
 
 ```
 
+### SEO Analysis
+The package comes with a set of default SEO analysis rules that help you optimize your content for search engines.
+The default rules include checks for keyword density, meta description length, header tags, and more.
+More rules can be added by creating classes that implement the `VanOns\FilamentSeo\SEO\Analysis\AnalyserInterface` interface.
+These rules can be registered in multiple ways:
+
+**Option 1**: Publish the config file using the command `php artisan vendor:publish --tag=seo-config` and add your custom analysers to the `default_analysers` array in the `config/seo.php` file.
+```php
+    'analysis' => [
+        'default_analysers' => [
+            TitleLength::class,
+            DescriptionLength::class,
+            ContentLength::class,
+            FocusKeyphraseLength::class,
+            FocusKeyphraseInContent::class,
+            FocusKeyphraseInTitle::class,
+            FocusKeyphraseInDescription::class,
+            FocusKeyphraseInUrl::class,
+            FocusKeyPhraseUnique::class,
+            MyAnalyser::class, // Add your custom analyser class here
+        ],
+    ],
+```
+**Option 2**: Use the `AnalyserRegistry` facade to register your custom analysers in a service provider's boot method.
+```php
+use VanOns\FilamentSeo\Facades\AnalyserRegistry;
+
+...
+
+public function boot()
+{
+    AnalyserRegistry::register([
+        MyAnalyser::class, // Register using the class name
+        new MyAnalyser(), // Or register using an instance, this may be useful if your analyser has dependencies or requires configuration
+    ]);
+}
+```
+**Option 3**: Use the `AnalyserRegistry` facade to filter the default analysers in a service provider's boot method.
+This is useful if you need to modify the analysers based on the model being analysed.
+
+```php
+use VanOns\FilamentSeo\Facades\AnalyserRegistry;
+
+...
+
+public function boot()
+{
+    AnalyserRegistry::filter(function (array $analysers, \VanOns\FilamentSeo\Contracts\Seoable $seoable) {
+        if ($seoable instanceof \App\Models\SpecialPage) {
+            // Modify the analysers for SpecialPage model
+            $analysers[] = SpecialPageAnalyser::class;
+        }
+        
+        return $analysers;
+    });
+}
+```
+
+### AI Metadata Generation
+The package includes functionality to generate SEO metadata using AI. To enable this feature you need to set up your .env file with the following variables:
+
+```dotenv
+# Enable or disable AI metadata generation
+SEO_AI_ENABLED=true
+# Specify the AI provider
+SEO_AI_PROVIDER=openai
+# Specify the AI model to use
+SEO_AI_MODEL=gpt-4o
+# Add your API key for the AI provider
+OPENAI_API_KEY=KEY_HERE
+```
+
+PrismPHP is used to interact with AI providers, more information on compatible providers and models can be found in the
+[PrismPHP documentation](https://prismphp.com).
+
 ### Middleware
 
 This package comes with middleware to prevent indexing by search engines for

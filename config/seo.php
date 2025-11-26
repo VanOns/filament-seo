@@ -76,6 +76,16 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | AI Settings
+    |--------------------------------------------------------------------------
+    |
+    | Enable AI features for generating SEO metadata.
+    | Make sure to set the appropriate environment variables including the API keys.
+    | PrismPHP is used for AI integration, see https://prismphp.com/getting-started/configuration.html for more details.
+    |
+    */
     'ai' => [
         'enabled' => env('SEO_AI_ENABLED', false),
         'provider' => env('SEO_AI_PROVIDER', 'openai'),
