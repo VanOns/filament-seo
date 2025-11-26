@@ -7,7 +7,6 @@ use VanOns\FilamentSeo\SeoImage;
 
 interface Seoable extends HasUrl
 {
-
     public function getFocusKeyphrase(): ?string;
     public function getSeoTitle(): array;
 

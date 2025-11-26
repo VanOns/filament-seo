@@ -4,7 +4,6 @@ namespace VanOns\FilamentSeo\AI\Prompts;
 
 use Prism\Prism\Schema\ObjectSchema;
 use Prism\Prism\Schema\StringSchema;
-use VanOns\FilamentSeo\Contracts\Seoable;
 
 class GenerateDescription extends Prompt
 {

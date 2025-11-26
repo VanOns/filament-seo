@@ -10,7 +10,8 @@ use VanOns\FilamentSeo\Contracts\Seoable;
 class TitleLength implements AnalyserInterface
 {
     public function __construct(public int $maxRecommendedLength = 70)
-    {}
+    {
+    }
 
     public function analyse(Seoable $record): ?AnalysisResult
     {

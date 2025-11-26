@@ -11,7 +11,8 @@ use VanOns\FilamentSeo\Contracts\Seoable;
 class FocusKeyphraseLength implements AnalyserInterface
 {
     public function __construct(public int $words = 4)
-    {}
+    {
+    }
 
     public function analyse(Seoable $record): ?AnalysisResult
     {
