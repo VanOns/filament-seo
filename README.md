@@ -217,12 +217,14 @@ SEO_AI_ENABLED=true
 SEO_AI_PROVIDER=openai
 # Specify the AI model to use
 SEO_AI_MODEL=gpt-4o
-# Add your API key for the AI provider
-OPENAI_API_KEY=KEY_HERE
 ```
 
 PrismPHP is used to interact with AI providers, more information on compatible providers and models can be found in the
-[PrismPHP documentation](https://prismphp.com).
+[PrismPHP documentation](https://prismphp.com). For example, to use OpenAI as the AI provider, you need to set the `OPENAI_API_KEY` in your `.env` file:
+
+```dotenv
+OPENAI_API_KEY=KEY_HERE
+```
 
 ### Middleware
 
