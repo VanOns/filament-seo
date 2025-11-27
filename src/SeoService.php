@@ -148,6 +148,7 @@ class SeoService
     {
         return new HtmlString(
             collect($this->metaTags())
+                ->filter(fn ($tag) => !empty($tag['content']))
                 ->map(function ($tag) {
                     $name = $tag['name'] ?? $tag['property'] ?? null;
 
