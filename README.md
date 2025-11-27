@@ -250,6 +250,10 @@ public function boot()
         ]);
 }
 ```
+The sitemap routes get registered automatically, you can find them at `/sitemaps/{slug}.xml`. You can disable the routes from your .env file:
+```dotenv
+SEO_SITEMAP_ENABLED=false
+```
 
 ### Middleware
 

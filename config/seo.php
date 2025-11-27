@@ -102,6 +102,5 @@ return [
     */
     'sitemap' => [
         'routes_enabled' => env('SEO_SITEMAP_ENABLED', true),
-        'cache_ttl' => 3600,
     ],
 ];
