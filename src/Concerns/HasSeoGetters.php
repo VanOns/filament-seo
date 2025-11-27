@@ -88,7 +88,7 @@ trait HasSeoGetters
         return null;
     }
 
-    public function getSeoSitemap(): ?SitemapUrl
+    public function toSitemapUrl(): ?SitemapUrl
     {
         return null;
     }

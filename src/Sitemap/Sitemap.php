@@ -2,62 +2,82 @@
 
 namespace VanOns\FilamentSeo\Sitemap;
 
-use Closure;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use VanOns\FilamentSeo\Contracts\Seoable;
+use VanOns\FilamentSeo\Contracts\Sitemapable;
 
 class Sitemap
 {
-    /**
-     * @var Collection<SitemapUrl>
-     */
-    public Collection $urls;
+    protected int $count;
 
     /**
-     * @var Closure(): Collection<SitemapUrl>
-     */
-    public Closure $urlsCallback;
-
-    public string $slug;
-
-    /**
-     * @param string $slug
      * @param Collection<SitemapUrl>|null $urls
-     * @param (Closure(): Collection<SitemapUrl>)|null $urlsCallback
      */
-    public function __construct(string $slug, ?Collection $urls = null, ?Closure $urlsCallback = null)
-    {
-        $this->slug = $slug;
-        $this->urls = $urls ?? collect();
-        $this->urlsCallback = $urlsCallback;
+    public function __construct(
+        public string $slug,
+        public ?Collection $urls = null,
+        public ?Builder $query = null,
+        public ?int $perPage = 1000,
+    ) {
     }
 
-    public function url(): string
+    public function url(int $page = 1): string
     {
+        if ($this->pages() > 1) {
+            return route('sitemap.page.show', ['sitemap' => $this->slug, 'page' => $page]);
+        }
+
         return route('sitemap.show', ['sitemap' => $this->slug]);
     }
 
     /**
      * @return Collection<SitemapUrl>
      */
-    public function urls(): Collection
+    public function urls(int $page = 1): Collection
     {
-        if (isset($this->urlsCallback)) {
-            $this->urls = ($this->urlsCallback)();
+        if ($this->urls) {
+            return $this->urls->skip(($page - 1) * $this->perPage)->take($this->perPage);
         }
 
-        return $this->urls ?? collect();
+        if ($this->query) {
+            return $this->query->skip(($page - 1) * $this->perPage)->take($this->perPage)->get()->map(
+                // @phpstan-ignore-next-line
+                function (Sitemapable $seoable) {
+                    return $seoable->toSitemapUrl();
+                }
+            );
+        }
+
+        return collect();
+    }
+
+    public function count(): int
+    {
+        if (isset($this->count)) {
+            return $this->count;
+        }
+
+        if ($this->urls) {
+            $this->count = $this->urls->count();
+        }
+
+        if ($this->query) {
+            $this->count =  $this->query->count();
+        }
+
+        return $this->count ?? 0;
+    }
+
+    public function pages(): int
+    {
+        return (int) ceil($this->count() / $this->perPage);
     }
 
     public static function fromQuery(string $slug, Builder $query): Sitemap
     {
-        return new static(
+        return new Sitemap(
             slug: $slug,
-            urlsCallback: fn () => $query->get()->map(
-                fn (Seoable $seoable) => $seoable->getSeoSitemap()
-            )
+            query: $query
         );
     }
 

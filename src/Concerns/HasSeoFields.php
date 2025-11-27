@@ -120,7 +120,7 @@ trait HasSeoFields
         return Arr::get($this, $column)?->format('Y-m-d');
     }
 
-    public function getSeoSitemap(): ?SitemapUrl
+    public function toSitemapUrl(): ?SitemapUrl
     {
         $url = $this->url();
 

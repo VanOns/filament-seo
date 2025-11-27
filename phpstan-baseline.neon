@@ -13,6 +13,18 @@ parameters:
 			path: src/FilamentSeoServiceProvider.php
 
 		-
+			message: '#^Call to an undefined static method VanOns\\FilamentSeo\\Facades\\SitemapRegistry\:\:getSitemap\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Http/Controllers/SitemapController.php
+
+		-
+			message: '#^Call to an undefined static method VanOns\\FilamentSeo\\Facades\\SitemapRegistry\:\:getSitemaps\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: src/Http/Controllers/SitemapController.php
+
+		-
 			message: '#^Instanceof between Illuminate\\Routing\\Route and Illuminate\\Routing\\Route will always evaluate to true\.$#'
 			identifier: instanceof.alwaysTrue
 			count: 1

@@ -3,7 +3,6 @@
 namespace VanOns\FilamentSeo\Sitemap;
 
 use Illuminate\Support\Collection;
-use VanOns\FilamentSeo\Analysis\AnalyserInterface;
 
 class SitemapRegistry
 {

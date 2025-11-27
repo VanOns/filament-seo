@@ -2,8 +2,6 @@
 
 namespace VanOns\FilamentSeo\Sitemap;
 
-use DateTimeInterface;
-
 class SitemapUrl
 {
     public function __construct(
