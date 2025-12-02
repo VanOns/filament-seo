@@ -5,7 +5,7 @@ namespace VanOns\FilamentSeo\Contracts;
 use VanOns\FilamentSeo\Analysis\AnalyserInterface;
 use VanOns\FilamentSeo\SeoImage;
 
-interface Seoable extends HasUrl
+interface Seoable extends HasUrl, Sitemapable
 {
     public function getFocusKeyphrase(): ?string;
     public function getSeoTitle(): array;
@@ -34,7 +34,7 @@ interface Seoable extends HasUrl
 
     public function getSeoChangeFrequency(): ?string;
 
-    public function getSeoPriority(): ?string;
+    public function getSeoPriority(): ?float;
 
     public function getSeoLastModified(): ?string;
 

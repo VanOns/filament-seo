@@ -226,6 +226,35 @@ PrismPHP is used to interact with AI providers, more information on compatible p
 OPENAI_API_KEY=KEY_HERE
 ```
 
+### Sitemaps
+The package provides a simple way to generate sitemaps for your models. Your model must implement the `Sitemapable` interface, when you implement `Seoable` and use the `HasSeoFields` trait, this is done automatically.
+You can register sitemaps in a service provider's boot method using the `SitemapRegistry` facade:
+
+```php
+use VanOns\FilamentSeo\Facades\SitemapRegistry;
+
+...
+
+public function boot()
+{
+        SitemapRegistry::register([
+            // Generate sitemap from a query
+            Sitemap::fromQuery('pages', Page::published()),
+            // Generate sitemap from a model
+            Sitemap::fromModel('articles', Article::class),
+            // Manually create a sitemap
+            new Sitemap(
+                slug: 'home',
+                urls: collect([ new SitemapUrl(url('/')) ])
+            ),
+        ]);
+}
+```
+The sitemap routes get registered automatically, you can find them at `/sitemaps/{slug}.xml`. You can disable the routes from your .env file:
+```dotenv
+SEO_SITEMAP_ENABLED=false
+```
+
 ### Middleware
 
 This package comes with middleware to prevent indexing by search engines for

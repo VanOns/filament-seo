@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use VanOns\FilamentSeo\Facades\AnalyserRegistry;
 use VanOns\FilamentSeo\FormSchemas\ResourceSchema;
 use VanOns\FilamentSeo\SeoImage;
+use VanOns\FilamentSeo\Sitemap\SitemapUrl;
 
 trait HasSeoFields
 {
@@ -107,19 +108,37 @@ trait HasSeoFields
         return Arr::get($this, static::$seoPrefix . 'change_frequency');
     }
 
-    public function getSeoPriority(): ?string
+    public function getSeoPriority(): ?float
     {
-        return Arr::get($this, static::$seoPrefix . 'priority');
+        $priority = Arr::get($this, static::$seoPrefix . 'priority');
+        return $priority ? floatval($priority) : null;
     }
 
     public function getSeoLastModified(): ?string
     {
-        return Arr::get($this, 'updated_at')?->format('Y-m-d');
+        $column = defined(static::class . '::UPDATED_AT') ? static::UPDATED_AT : 'updated_at';
+        return Arr::get($this, $column)?->format('Y-m-d');
+    }
+
+    public function toSitemapUrl(): ?SitemapUrl
+    {
+        $url = $this->url();
+
+        if (!$url) {
+            return null;
+        }
+
+        return new SitemapUrl(
+            loc: $this->url(),
+            lastmod: $this->getSeoLastModified(),
+            changefreq: $this->getSeoChangeFrequency(),
+            priority: $this->getSeoPriority(),
+        );
     }
 
     public function getSeoAnalysers(): array
     {
-        return AnalyserRegistry::getAnalysers();
+        return AnalyserRegistry::getAnalysers($this);
     }
 
     public static function getSeoFields(): array
