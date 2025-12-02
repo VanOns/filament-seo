@@ -27,7 +27,8 @@ class SeoDescriptionInput extends Textarea
 
                 return RecommendedLength::make()
                     ->maxRecommendedLength($this->maxRecommendedLength)
-                    ->subject($subject);
+                    ->subject($subject)
+                    ->schema();
             })
             ->placeholder(function (Get $get) {
                 if (!$this->fallbackField) {

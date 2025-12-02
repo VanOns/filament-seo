@@ -21,7 +21,8 @@ class SeoTitleInput extends TextInput
             ->belowContent(function (?string $state, Get $get) {
                 return RecommendedLength::make()
                     ->maxRecommendedLength($this->maxRecommendedLength)
-                    ->subject($state ?: $get($this->fallbackField));
+                    ->subject($state ?: $get($this->fallbackField))
+                    ->schema();
             })
             ->placeholder(function (Get $get) {
                 return $get($this->fallbackField);

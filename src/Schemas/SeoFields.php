@@ -1,6 +1,6 @@
 <?php
 
-namespace VanOns\FilamentSeo\FormSchemas;
+namespace VanOns\FilamentSeo\Schemas;
 
 use Closure;
 use Filament\Forms\Components\Field;
@@ -22,19 +22,25 @@ use VanOns\FilamentSeo\Actions\GenerateMetadata;
 use VanOns\FilamentSeo\AI\Prompts\GenerateDescription;
 use VanOns\FilamentSeo\AI\Prompts\GeneratePageTitle;
 use VanOns\FilamentSeo\AI\Prompts\Prompt;
-use VanOns\FilamentSeo\Contracts\ResourceSchema as ResourceSchemaContract;
 use VanOns\FilamentSeo\Contracts\Seoable;
 use VanOns\FilamentSeo\Fields\SeoDescriptionInput;
 use VanOns\FilamentSeo\Fields\SeoTitleInput;
-use VanOns\FilamentSeo\Schemas\Analysis;
 
-class ResourceSchema implements ResourceSchemaContract
+class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
 {
-    public static string $seoPrefix = 'seo.';
+    public function __construct(
+        public string $seoPrefix = 'seo.'
+    ) {
+    }
+
+    public static function make(string $seoPrefix = 'seo.'): static
+    {
+        return app(static::class, ['seoPrefix' => $seoPrefix]);
+    }
 
     public function titleField(): Field
     {
-        return SeoTitleInput::make(static::$seoPrefix . 'title')
+        return SeoTitleInput::make($this->seoPrefix . 'title')
             ->maxRecommendedLength(70)
             ->label(__('filament-seo::seo.page_title.label'))
             ->afterLabel(
@@ -46,7 +52,7 @@ class ResourceSchema implements ResourceSchemaContract
 
     public function descriptionField(): Field
     {
-        return SeoDescriptionInput::make(static::$seoPrefix . 'description')
+        return SeoDescriptionInput::make($this->seoPrefix . 'description')
             ->maxRecommendedLength(160)
             ->label(__('filament-seo::seo.description.label'))
             ->afterLabel(
@@ -58,21 +64,21 @@ class ResourceSchema implements ResourceSchemaContract
 
     public function noIndexField(): Field
     {
-        return Toggle::make(static::$seoPrefix . 'noindex')
+        return Toggle::make($this->seoPrefix . 'noindex')
             ->label(__('filament-seo::seo.no_index'))
             ->helperText(__('filament-seo::seo.no_index_help'));
     }
 
     public function noFollowField(): Field
     {
-        return Toggle::make(static::$seoPrefix . 'nofollow')
+        return Toggle::make($this->seoPrefix . 'nofollow')
             ->label(__('filament-seo::seo.no_follow'))
             ->helperText(__('filament-seo::seo.no_follow_help'));
     }
 
     public function canonicalField(): Field
     {
-        return Select::make(static::$seoPrefix . 'canonical')
+        return Select::make($this->seoPrefix . 'canonical')
             ->label(__('filament-seo::seo.canonical_url'))
             ->helperText(__('filament-seo::seo.canonical_url_help'))
             ->options([
@@ -85,31 +91,31 @@ class ResourceSchema implements ResourceSchemaContract
 
     public function canonicalUrlField(): Field
     {
-        return TextInput::make(static::$seoPrefix . 'canonical_url')
+        return TextInput::make($this->seoPrefix . 'canonical_url')
             ->label(__('filament-seo::seo.custom_url'))
             ->placeholder(__('https://example.com/page'))
-            ->hidden(fn (Get $get) => $get(static::$seoPrefix . 'canonical') !== 'url');
+            ->hidden(fn (Get $get) => $get($this->seoPrefix . 'canonical') !== 'url');
     }
 
     public function ogTitleField(): Field
     {
-        return SeoTitleInput::make(static::$seoPrefix . 'og_title')
+        return SeoTitleInput::make($this->seoPrefix . 'og_title')
             ->maxRecommendedLength(70)
             ->label(__('filament-seo::seo.social_title'))
-            ->fallbackField(static::$seoPrefix . 'title');
+            ->fallbackField($this->seoPrefix . 'title');
     }
 
     public function ogDescriptionField(): Field
     {
-        return SeoDescriptionInput::make(static::$seoPrefix . 'og_description')
+        return SeoDescriptionInput::make($this->seoPrefix . 'og_description')
             ->maxRecommendedLength(160)
             ->label(__('filament-seo::seo.social_description'))
-            ->fallbackField(static::$seoPrefix . 'description');
+            ->fallbackField($this->seoPrefix . 'description');
     }
 
     public function ogImageField(): Field
     {
-        return FileUpload::make(static::$seoPrefix . 'og_image')
+        return FileUpload::make($this->seoPrefix . 'og_image')
             ->label(__('filament-seo::seo.social_image'))
             ->imageResizeMode('cover')
             ->imageEditor()
@@ -123,7 +129,7 @@ class ResourceSchema implements ResourceSchemaContract
 
     public function changeFrequencyField(): Field
     {
-        return Select::make(static::$seoPrefix . 'change_frequency')
+        return Select::make($this->seoPrefix . 'change_frequency')
             ->label(__('filament-seo::seo.change_frequency'))
             ->helperText(__('filament-seo::seo.change_frequency_help'))
             ->options([
@@ -139,7 +145,7 @@ class ResourceSchema implements ResourceSchemaContract
 
     public function priorityField(): Field
     {
-        return Select::make(static::$seoPrefix . 'priority')
+        return Select::make($this->seoPrefix . 'priority')
             ->label(__('filament-seo::seo.priority'))
             ->helperText(__('filament-seo::seo.priority_help'))
             ->options([
@@ -158,7 +164,7 @@ class ResourceSchema implements ResourceSchemaContract
 
     public function focusKeyphraseField(): Field
     {
-        return TextInput::make(static::$seoPrefix . 'focus_keyphrase')
+        return TextInput::make($this->seoPrefix . 'focus_keyphrase')
             ->label(__('filament-seo::seo.focus_keyphrase.label'))
             ->helperText(__('filament-seo::seo.focus_keyphrase.help'))
             ->live();
@@ -187,13 +193,14 @@ class ResourceSchema implements ResourceSchemaContract
         return $clone->fill($get());
     }
 
-    public function analysisSchema(?Model $record, Get $get, string $operation, Component $livewire): ?Analysis
+    public function analysisSchema(?Model $record, Get $get, string $operation, Component $livewire): array
     {
         $record = $this->getRecord($record, $get, $operation, $livewire);
 
         return Analysis::make()
             ->analysers($record->getSeoAnalysers())
-            ->seoable($record);
+            ->seoable($record)
+            ->schema();
     }
 
     public function generateMetadataAction(Prompt $prompt): Closure

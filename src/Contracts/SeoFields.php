@@ -2,6 +2,6 @@
 
 namespace VanOns\FilamentSeo\Contracts;
 
-interface ResourceSchema extends Schema
+interface SeoFields extends Schema
 {
 }

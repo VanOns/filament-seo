@@ -3,8 +3,8 @@
 namespace VanOns\FilamentSeo\Concerns;
 
 use Illuminate\Support\Arr;
+use VanOns\FilamentSeo\Contracts\SeoFields;
 use VanOns\FilamentSeo\Facades\AnalyserRegistry;
-use VanOns\FilamentSeo\FormSchemas\ResourceSchema;
 use VanOns\FilamentSeo\SeoImage;
 use VanOns\FilamentSeo\Sitemap\SitemapUrl;
 
@@ -143,6 +143,6 @@ trait HasSeoFields
 
     public static function getSeoFields(): array
     {
-        return app(ResourceSchema::class)->schema();
+        return app(SeoFields::class)->schema();
     }
 }
