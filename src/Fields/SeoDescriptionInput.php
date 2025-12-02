@@ -2,14 +2,18 @@
 
 namespace VanOns\FilamentSeo\Fields;
 
+use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Utilities\Get;
+use VanOns\FilamentSeo\AI\Prompts\GeneratePageTitle;
+use VanOns\FilamentSeo\Concerns\HasMetadataGeneration;
 use VanOns\FilamentSeo\Concerns\HasRecommendedLength;
 use VanOns\FilamentSeo\Schemas\RecommendedLength;
 
 class SeoDescriptionInput extends Textarea
 {
     use HasRecommendedLength;
+    use HasMetadataGeneration;
 
     protected ?string $fallbackField = null;
 
@@ -36,7 +40,11 @@ class SeoDescriptionInput extends Textarea
                 }
 
                 return $get($this->fallbackField);
-            });
+            })
+            ->extraAttributes(function (Field $component) {
+                return $this->generateMetadataAlpineListener($component);
+            })
+            ->afterLabel($this->generateMetadataAction(new GeneratePageTitle()));
     }
 
     public function fallbackField(?string $field): static

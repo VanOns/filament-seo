@@ -10,6 +10,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
@@ -17,6 +18,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use Livewire\Livewire;
 use Prism\Prism\Structured\Response;
 use VanOns\FilamentSeo\Actions\GenerateMetadata;
 use VanOns\FilamentSeo\AI\Prompts\GenerateDescription;
@@ -42,24 +44,14 @@ class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
     {
         return SeoTitleInput::make($this->seoPrefix . 'title')
             ->maxRecommendedLength(70)
-            ->label(__('filament-seo::seo.page_title.label'))
-            ->afterLabel(
-                config('seo.ai.enabled', false)
-                    ? $this->generateMetadataAction(new GeneratePageTitle())
-                    : null
-            );
+            ->label(__('filament-seo::seo.page_title.label'));
     }
 
     public function descriptionField(): Field
     {
         return SeoDescriptionInput::make($this->seoPrefix . 'description')
             ->maxRecommendedLength(160)
-            ->label(__('filament-seo::seo.description.label'))
-            ->afterLabel(
-                config('seo.ai.enabled', false)
-                    ? $this->generateMetadataAction(new GenerateDescription())
-                    : null
-            );
+            ->label(__('filament-seo::seo.description.label'));
     }
 
     public function noIndexField(): Field
@@ -171,6 +163,7 @@ class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
     }
 
     /**
+     * TODO: Can we move this to a trait?
      * @param Model|null $record
      * @param Get $get
      * @param string $operation
@@ -201,27 +194,6 @@ class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
             ->analysers($record->getSeoAnalysers())
             ->seoable($record)
             ->schema();
-    }
-
-    public function generateMetadataAction(Prompt $prompt): Closure
-    {
-        return function (Field $component, ?Model $record, Get $get, Set $set, string $operation, Component $livewire) use ($prompt) {
-            $record = $this->getRecord($record, $get, $operation, $livewire);
-
-            return GenerateMetadata::make('generate_metadata_' . $component->getName())
-                ->seoable($record)
-                ->prompt($prompt)
-                ->onResponse(function (?Response $response) use ($set, $component) {
-                    if ($output = $response->structured['output'] ?? null) {
-                        $set($component->getName(), $output);
-                    }
-
-                    Notification::make()
-                        ->title(__('filament-seo::seo.ai_generation_completed'))
-                        ->success()
-                        ->send();
-                });
-        };
     }
 
     public function schema(): array
