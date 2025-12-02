@@ -6,6 +6,16 @@ use VanOns\FilamentSeo\SeoImage;
 
 trait HasSeoGetters
 {
+    public function url(): ?string
+    {
+        return null;
+    }
+
+    public function getFocusKeyphrase(): ?string
+    {
+        return null;
+    }
+
     public function getSeoDescription(): ?string
     {
         return null;
@@ -75,5 +85,15 @@ trait HasSeoGetters
     public function getSeoLastModified(): ?string
     {
         return null;
+    }
+
+    public function getSeoContent(): ?string
+    {
+        return null;
+    }
+
+    public function getSeoAnalysers(): array
+    {
+        return [];
     }
 }

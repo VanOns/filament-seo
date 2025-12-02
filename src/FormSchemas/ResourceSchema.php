@@ -2,16 +2,31 @@
 
 namespace VanOns\FilamentSeo\FormSchemas;
 
+use Closure;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Notifications\Notification;
+use Filament\Resources\Pages\CreateRecord;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Illuminate\Database\Eloquent\Model;
+use Livewire\Component;
+use Prism\Prism\Structured\Response;
+use VanOns\FilamentSeo\Actions\GenerateMetadata;
+use VanOns\FilamentSeo\AI\Prompts\GenerateDescription;
+use VanOns\FilamentSeo\AI\Prompts\GeneratePageTitle;
+use VanOns\FilamentSeo\AI\Prompts\Prompt;
 use VanOns\FilamentSeo\Contracts\ResourceSchema as ResourceSchemaContract;
+use VanOns\FilamentSeo\Contracts\Seoable;
+use VanOns\FilamentSeo\Fields\SeoDescriptionInput;
+use VanOns\FilamentSeo\Fields\SeoTitleInput;
+use VanOns\FilamentSeo\Schemas\Analysis;
 
 class ResourceSchema implements ResourceSchemaContract
 {
@@ -19,51 +34,50 @@ class ResourceSchema implements ResourceSchemaContract
 
     public function titleField(): Field
     {
-        $titleSeparater = '-';
-        $title = config('app.name');
-
-        return TextInput::make(static::$seoPrefix . 'title')
-            ->label(__('Page title'))
-            ->helperText(__('A title for the page, max 70 characters including the site name'))
-            ->suffix($titleSeparater . ' ' . $title);
+        return SeoTitleInput::make(static::$seoPrefix . 'title')
+            ->maxRecommendedLength(70)
+            ->label(__('filament-seo::seo.page_title.label'))
+            ->afterLabel(
+                config('seo.ai.enabled', false)
+                    ? $this->generateMetadataAction(new GeneratePageTitle())
+                    : null
+            );
     }
 
     public function descriptionField(): Field
     {
-        return Textarea::make(static::$seoPrefix . 'description')
-            ->label(__('Description'))
-            ->helperText(__('A short description of the content, max 160 characters'));
-    }
-
-    public function keywordsField(): Field
-    {
-        return Textarea::make(static::$seoPrefix . 'keywords')
-            ->label(__('Keywords'))
-            ->helperText(__('The keywords for the page, comma separated'));
+        return SeoDescriptionInput::make(static::$seoPrefix . 'description')
+            ->maxRecommendedLength(160)
+            ->label(__('filament-seo::seo.description.label'))
+            ->afterLabel(
+                config('seo.ai.enabled', false)
+                    ? $this->generateMetadataAction(new GenerateDescription())
+                    : null
+            );
     }
 
     public function noIndexField(): Field
     {
         return Toggle::make(static::$seoPrefix . 'noindex')
-            ->label(__('No index'))
-            ->helperText(__('Prevent search engines from indexing this page'));
+            ->label(__('filament-seo::seo.no_index'))
+            ->helperText(__('filament-seo::seo.no_index_help'));
     }
 
     public function noFollowField(): Field
     {
         return Toggle::make(static::$seoPrefix . 'nofollow')
-            ->label(__('No follow'))
-            ->helperText(__('Prevent search engines from following links on this page'));
+            ->label(__('filament-seo::seo.no_follow'))
+            ->helperText(__('filament-seo::seo.no_follow_help'));
     }
 
     public function canonicalField(): Field
     {
         return Select::make(static::$seoPrefix . 'canonical')
-            ->label(__('Canonical URL'))
-            ->helperText(__('The preferred version of a set of pages with highly similar content'))
+            ->label(__('filament-seo::seo.canonical_url'))
+            ->helperText(__('filament-seo::seo.canonical_url_help'))
             ->options([
-                null => __('This page'),
-                'url' => __('Custom URL'),
+                null => __('filament-seo::seo.this_page'),
+                'url' => __('filament-seo::seo.custom_url'),
             ])
             ->selectablePlaceholder(false)
             ->live();
@@ -72,29 +86,31 @@ class ResourceSchema implements ResourceSchemaContract
     public function canonicalUrlField(): Field
     {
         return TextInput::make(static::$seoPrefix . 'canonical_url')
-            ->label(__('Custom URL'))
+            ->label(__('filament-seo::seo.custom_url'))
             ->placeholder(__('https://example.com/page'))
             ->hidden(fn (Get $get) => $get(static::$seoPrefix . 'canonical') !== 'url');
     }
 
     public function ogTitleField(): Field
     {
-        return TextInput::make(static::$seoPrefix . 'og_title')
-            ->label(__('Social Title'))
-            ->helperText(__('A title for the page, max 70 characters'));
+        return SeoTitleInput::make(static::$seoPrefix . 'og_title')
+            ->maxRecommendedLength(70)
+            ->label(__('filament-seo::seo.social_title'))
+            ->fallbackField(static::$seoPrefix . 'title');
     }
 
     public function ogDescriptionField(): Field
     {
-        return Textarea::make(static::$seoPrefix . 'og_description')
-            ->label(__('Social Description'))
-            ->helperText(__('A short description of the content, max 160 characters'));
+        return SeoDescriptionInput::make(static::$seoPrefix . 'og_description')
+            ->maxRecommendedLength(160)
+            ->label(__('filament-seo::seo.social_description'))
+            ->fallbackField(static::$seoPrefix . 'description');
     }
 
     public function ogImageField(): Field
     {
         return FileUpload::make(static::$seoPrefix . 'og_image')
-            ->label(__('Social Image'))
+            ->label(__('filament-seo::seo.social_image'))
             ->imageResizeMode('cover')
             ->imageEditor()
             ->imageCropAspectRatio('1200:630')
@@ -108,24 +124,24 @@ class ResourceSchema implements ResourceSchemaContract
     public function changeFrequencyField(): Field
     {
         return Select::make(static::$seoPrefix . 'change_frequency')
-            ->label(__('Change frequency'))
-            ->helperText(__('How frequently the page is likely to change'))
+            ->label(__('filament-seo::seo.change_frequency'))
+            ->helperText(__('filament-seo::seo.change_frequency_help'))
             ->options([
-                'always' => __('Always'),
-                'hourly' => __('Hourly'),
-                'daily' => __('Daily'),
-                'weekly' => __('Weekly'),
-                'monthly' => __('Monthly'),
-                'yearly' => __('Yearly'),
-                'never' => __('Never'),
+                'always' => __('filament-seo::seo.frequency.always'),
+                'hourly' => __('filament-seo::seo.frequency.hourly'),
+                'daily' => __('filament-seo::seo.frequency.daily'),
+                'weekly' => __('filament-seo::seo.frequency.weekly'),
+                'monthly' => __('filament-seo::seo.frequency.monthly'),
+                'yearly' => __('filament-seo::seo.frequency.yearly'),
+                'never' => __('filament-seo::seo.frequency.never'),
             ]);
     }
 
     public function priorityField(): Field
     {
         return Select::make(static::$seoPrefix . 'priority')
-            ->label(__('Priority'))
-            ->helperText(__('The priority of this URL relative to other URLs on your site'))
+            ->label(__('filament-seo::seo.priority'))
+            ->helperText(__('filament-seo::seo.priority_help'))
             ->options([
                 '0.1' => '0.1',
                 '0.2' => '0.2',
@@ -140,30 +156,98 @@ class ResourceSchema implements ResourceSchemaContract
             ]);
     }
 
+    public function focusKeyphraseField(): Field
+    {
+        return TextInput::make(static::$seoPrefix . 'focus_keyphrase')
+            ->label(__('filament-seo::seo.focus_keyphrase.label'))
+            ->helperText(__('filament-seo::seo.focus_keyphrase.help'))
+            ->live();
+    }
+
+    /**
+     * @param Model|null $record
+     * @param Get $get
+     * @param string $operation
+     * @param Component $livewire
+     * @return (Model&Seoable)|null
+     */
+    protected function getRecord(?Model $record, Get $get, string $operation, Component $livewire): ?Model
+    {
+        if ($operation === 'create' && $livewire instanceof CreateRecord) {
+            $record = new ($livewire->getModel());
+        }
+
+        if (!$record instanceof Seoable) {
+            return null;
+        }
+
+        /** @var Model&Seoable $record */
+        $clone = clone $record;
+
+        return $clone->fill($get());
+    }
+
+    public function analysisSchema(?Model $record, Get $get, string $operation, Component $livewire): ?Analysis
+    {
+        $record = $this->getRecord($record, $get, $operation, $livewire);
+
+        return Analysis::make()
+            ->analysers($record->getSeoAnalysers())
+            ->seoable($record);
+    }
+
+    public function generateMetadataAction(Prompt $prompt): Closure
+    {
+        return function (Field $component, ?Model $record, Get $get, Set $set, string $operation, Component $livewire) use ($prompt) {
+            $record = $this->getRecord($record, $get, $operation, $livewire);
+
+            return GenerateMetadata::make('generate_metadata_' . $component->getName())
+                ->seoable($record)
+                ->prompt($prompt)
+                ->onResponse(function (?Response $response) use ($set, $component) {
+                    if ($output = $response->structured['output'] ?? null) {
+                        $set($component->getName(), $output);
+                    }
+
+                    Notification::make()
+                        ->title(__('filament-seo::seo.ai_generation_completed'))
+                        ->success()
+                        ->send();
+                });
+        };
+    }
+
     public function schema(): array
     {
         return [
-            Section::make(__('Basic'))->schema([
-                $this->titleField(),
-                $this->descriptionField(),
-                $this->keywordsField(),
-            ]),
-            Section::make(__('Advanced'))->schema([
-                Group::make([
-                    $this->noIndexField(),
-                    $this->noFollowField(),
-                ])->columns(2),
-                $this->canonicalField(),
-                $this->canonicalUrlField(),
-            ]),
-            Section::make(__('Social'))->description(__('Open Graph meta data for sharing on social platforms.'))->schema([
-                $this->ogTitleField(),
-                $this->ogDescriptionField(),
-                $this->ogImageField(),
-            ]),
-            Section::make(__('Sitemap'))->schema([
-                $this->changeFrequencyField(),
-                $this->priorityField(),
+            Grid::make(3)->schema([
+                Section::make()->schema([
+                    Section::make(__('filament-seo::seo.basic'))->schema([
+                        $this->focusKeyphraseField(),
+                        $this->titleField(),
+                        $this->descriptionField(),
+                    ]),
+                    Section::make(__('filament-seo::seo.advanced'))->schema([
+                        Group::make([
+                            $this->noIndexField(),
+                            $this->noFollowField(),
+                        ])->columns(2),
+                        $this->canonicalField(),
+                        $this->canonicalUrlField(),
+                    ]),
+                    Section::make(__('filament-seo::seo.social'))->description(__('filament-seo::seo.social_help_text'))->schema([
+                        $this->ogTitleField(),
+                        $this->ogDescriptionField(),
+                        $this->ogImageField(),
+                    ]),
+                    Section::make(__('filament-seo::seo.sitemap'))->schema([
+                        $this->changeFrequencyField(),
+                        $this->priorityField(),
+                    ]),
+                ])
+                    ->contained(false)
+                    ->columnSpan(2),
+                Section::make(__('filament-seo::seo.analysis'))->schema($this->analysisSchema(...)),
             ]),
         ];
     }

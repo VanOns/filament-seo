@@ -4,6 +4,7 @@ namespace VanOns\FilamentSeo;
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Blade;
+use VanOns\FilamentSeo\Analysis\AnalyserRegistry;
 use VanOns\FilamentSeo\Contracts\ResourceSchema as ResourceSchemaContract;
 use VanOns\FilamentSeo\Contracts\SeoSettings;
 use VanOns\FilamentSeo\FormSchemas\ResourceSchema;
@@ -18,6 +19,7 @@ class FilamentSeoServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->registerViews();
         $this->registerComponents();
         $this->registerGlobalMiddleware();
+        $this->registerTranslations();
     }
 
     public function register(): void
@@ -25,6 +27,7 @@ class FilamentSeoServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/seo.php', 'seo');
 
         $this->app->singleton(SeoService::class);
+        $this->app->singleton(AnalyserRegistry::class);
         $this->app->bind(ResourceSchemaContract::class, ResourceSchema::class);
 
         if (config('seo.settings.driver') === 'config') {
@@ -57,5 +60,13 @@ class FilamentSeoServiceProvider extends \Illuminate\Support\ServiceProvider
         $kernel = app()->make(Kernel::class);
 
         $kernel->pushMiddleware(NoIndex::class);
+    }
+
+    public function registerTranslations(): void
+    {
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'filament-seo');
+        $this->publishes([
+            __DIR__ . '/../resources/lang' => $this->app->langPath('vendor/filament-seo'),
+        ], 'lang');
     }
 }

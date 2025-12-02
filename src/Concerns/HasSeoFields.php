@@ -3,6 +3,7 @@
 namespace VanOns\FilamentSeo\Concerns;
 
 use Illuminate\Support\Arr;
+use VanOns\FilamentSeo\Facades\AnalyserRegistry;
 use VanOns\FilamentSeo\FormSchemas\ResourceSchema;
 use VanOns\FilamentSeo\SeoImage;
 
@@ -11,6 +12,11 @@ trait HasSeoFields
     use HasSeoGetters;
 
     public static string $seoPrefix = 'seo.';
+
+    public function getFocusKeyphrase(): ?string
+    {
+        return Arr::get($this, static::$seoPrefix . 'focus_keyphrase');
+    }
 
     public static function getDefaultSeoTitleField(): string
     {
@@ -24,7 +30,7 @@ trait HasSeoFields
 
     public function getSeoTitle(): array
     {
-        return [Arr::get($this, static::$seoPrefix . 'title') ?? $this->getDefaultSeoTitle()];
+        return [Arr::get($this, static::$seoPrefix . 'title') ?: $this->getDefaultSeoTitle()];
     }
 
     public function getDefaultSeoDescription(): ?string
@@ -34,7 +40,7 @@ trait HasSeoFields
 
     public function getSeoDescription(): ?string
     {
-        return Arr::get($this, static::$seoPrefix . 'description') ?? $this->getDefaultSeoDescription();
+        return Arr::get($this, static::$seoPrefix . 'description') ?: $this->getDefaultSeoDescription();
     }
 
     public function getSeoKeywords(): ?string
@@ -93,7 +99,7 @@ trait HasSeoFields
 
     public function getSeoOgDescription(): ?string
     {
-        return Arr::get($this, static::$seoPrefix . 'og_description') ?? $this->getSeoDescription();
+        return Arr::get($this, static::$seoPrefix . 'og_description') ?: $this->getSeoDescription();
     }
 
     public function getSeoChangeFrequency(): ?string
@@ -109,6 +115,11 @@ trait HasSeoFields
     public function getSeoLastModified(): ?string
     {
         return Arr::get($this, 'updated_at')?->format('Y-m-d');
+    }
+
+    public function getSeoAnalysers(): array
+    {
+        return AnalyserRegistry::getAnalysers();
     }
 
     public static function getSeoFields(): array
