@@ -12,32 +12,10 @@ use Livewire\Component;
 use Prism\Prism\Structured\Response;
 use VanOns\FilamentSeo\Actions\GenerateMetadata;
 use VanOns\FilamentSeo\AI\Prompts\Prompt;
-use VanOns\FilamentSeo\Contracts\Seoable;
 
 trait HasMetadataGeneration
 {
-    /**
-     * @param Model|null $record
-     * @param Get $get
-     * @param string $operation
-     * @param Component $livewire
-     * @return (Model&Seoable)|null
-     */
-    protected function getAndFillRecord(?Model $record, Get $get, string $operation, Component $livewire): ?Model
-    {
-        if ($operation === 'create' && $livewire instanceof CreateRecord) {
-            $record = new ($livewire->getModel());
-        }
-
-        if (!$record instanceof Seoable) {
-            return null;
-        }
-
-        /** @var Model&Seoable $record */
-        $clone = clone $record;
-
-        return $clone->fill($get());
-    }
+    use GetsFilledRecord;
 
     public function generateMetadataAction(Prompt $prompt): ?Closure
     {
@@ -46,7 +24,7 @@ trait HasMetadataGeneration
         }
 
         return function (Field $component, ?Model $record, Get $get, string $operation, Component $livewire) use ($prompt) {
-            $record = $this->getAndFillRecord($record, $get, $operation, $livewire);
+            $record = $this->getFilledRecord($record, $get, $operation, $livewire);
 
             return GenerateMetadata::make('generate_metadata_' . $component->getName())
                 ->seoable($record)
