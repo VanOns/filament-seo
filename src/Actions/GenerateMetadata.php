@@ -4,9 +4,7 @@ namespace VanOns\FilamentSeo\Actions;
 
 use Closure;
 use Filament\Actions\Action;
-use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Icons\Heroicon;
-use Livewire\Component;
 use VanOns\FilamentSeo\AI\Prompts\Prompt;
 use VanOns\FilamentSeo\Contracts\Seoable;
 

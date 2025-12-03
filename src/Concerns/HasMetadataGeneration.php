@@ -5,7 +5,6 @@ namespace VanOns\FilamentSeo\Concerns;
 use Closure;
 use Filament\Forms\Components\Field;
 use Filament\Notifications\Notification;
-use Filament\Resources\Pages\CreateRecord;
 use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
