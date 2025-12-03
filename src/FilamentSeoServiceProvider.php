@@ -4,15 +4,15 @@ namespace VanOns\FilamentSeo;
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\ServiceProvider;
 use VanOns\FilamentSeo\Analysis\AnalyserRegistry;
-use VanOns\FilamentSeo\Contracts\ResourceSchema as ResourceSchemaContract;
 use VanOns\FilamentSeo\Contracts\SeoSettings;
-use VanOns\FilamentSeo\FormSchemas\ResourceSchema;
 use VanOns\FilamentSeo\Http\Middleware\NoIndex;
+use VanOns\FilamentSeo\Schemas\SeoFields;
 use VanOns\FilamentSeo\Settings\ConfigSettingsDriver;
 use VanOns\FilamentSeo\Sitemap\SitemapRegistry;
 
-class FilamentSeoServiceProvider extends \Illuminate\Support\ServiceProvider
+class FilamentSeoServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
@@ -31,7 +31,7 @@ class FilamentSeoServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->singleton(SeoService::class);
         $this->app->singleton(AnalyserRegistry::class);
         $this->app->singleton(SitemapRegistry::class);
-        $this->app->bind(ResourceSchemaContract::class, ResourceSchema::class);
+        $this->app->bind(Contracts\SeoFields::class, SeoFields::class);
 
         if (config('seo.settings.driver') === 'config') {
             $this->app->bind(SeoSettings::class, ConfigSettingsDriver::class);

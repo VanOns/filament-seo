@@ -5,15 +5,15 @@ namespace VanOns\FilamentSeo\Schemas;
 use Filament\Schemas\Components\Flex;
 use Filament\Schemas\Components\Icon;
 use Filament\Schemas\Components\Text;
-use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use VanOns\FilamentSeo\Analysis\AnalyserInterface;
 use VanOns\FilamentSeo\Analysis\AnalysisResult;
+use VanOns\FilamentSeo\Contracts\Schema;
 use VanOns\FilamentSeo\Contracts\Seoable;
 
-class Analysis extends Schema
+class Analysis implements Schema
 {
     /**
      * @var Collection<array-key, AnalyserInterface>
@@ -22,22 +22,9 @@ class Analysis extends Schema
 
     protected Seoable $seoable;
 
-    protected function setUp(): void
+    public static function make(): static
     {
-        parent::setUp();
-
-        $this->analysers = collect();
-
-        $this->schema(function () {
-            return collect($this->analysers)->map(
-                fn (AnalyserInterface $analyser) => $analyser->analyse($this->seoable)
-            )->filter()->map(
-                fn (?AnalysisResult $result) => Flex::make([
-                    Icon::make($result->status->icon())->color($result->status->color())->grow(false),
-                    Text::make($result->message),
-                ])
-            )->toArray();
-        });
+        return app(static::class);
     }
 
     /**
@@ -76,5 +63,17 @@ class Analysis extends Schema
         $this->seoable = $seoable;
 
         return $this;
+    }
+
+    public function schema(): array
+    {
+        return $this->analysers->map(
+            fn (AnalyserInterface $analyser) => $analyser->analyse($this->seoable)
+        )->filter()->map(
+            fn (?AnalysisResult $result) => Flex::make([
+                Icon::make($result->status->icon())->color($result->status->color())->grow(false),
+                Text::make($result->message),
+            ])
+        )->toArray();
     }
 }

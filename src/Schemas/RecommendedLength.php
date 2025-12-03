@@ -2,13 +2,14 @@
 
 namespace VanOns\FilamentSeo\Schemas;
 
+use Filament\Schemas\Components\Flex;
 use Filament\Schemas\Components\Icon;
 use Filament\Schemas\Components\Text;
-use Filament\Schemas\Schema;
 use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
+use VanOns\FilamentSeo\Contracts\Schema;
 
-class RecommendedLength extends Schema
+class RecommendedLength implements Schema
 {
     public ?int $maxRecommendedLength = null;
 
@@ -18,14 +19,9 @@ class RecommendedLength extends Schema
 
     protected ?string $subject = null;
 
-    protected function setUp(): void
+    public static function make(): static
     {
-        parent::setUp();
-
-        $this->schema(fn () => [
-            $this->icon(),
-            $this->text(),
-        ])->alignStart();
+        return app(static::class);
     }
 
     public function maxRecommendedLength(int $maxRecommendedLength): static
@@ -80,5 +76,15 @@ class RecommendedLength extends Schema
     {
         $length = strlen($this->subject);
         return Text::make(__('filament-seo::seo.count_characters', ['count' => "{$length} / {$this->maxRecommendedLength}"]));
+    }
+
+    public function schema(): array
+    {
+        return [
+            Flex::make([
+                $this->icon()->grow(false),
+                $this->text()->grow(),
+            ])->verticallyAlignStart(),
+        ];
     }
 }
