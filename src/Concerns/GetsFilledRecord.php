@@ -3,6 +3,7 @@
 namespace VanOns\FilamentSeo\Concerns;
 
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
@@ -21,6 +22,8 @@ trait GetsFilledRecord
     {
         if ($operation === 'create' && $livewire instanceof CreateRecord) {
             $record = new ($livewire->getModel());
+        } elseif ($operation === 'create' && $livewire instanceof RelationManager) {
+            $record = new ($livewire->getOwnerRecord()->{$livewire::getRelationshipName()}()->getQuery()->getModel()::class);
         }
 
         if (!$record instanceof Seoable) {
