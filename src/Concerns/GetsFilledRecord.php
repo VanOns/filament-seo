@@ -33,6 +33,8 @@ trait GetsFilledRecord
         /** @var Model&Seoable $record */
         $clone = clone $record;
 
+        $clone->preventSilentlyDiscardingAttributes(false);
+
         return $clone->fill($get());
     }
 }
