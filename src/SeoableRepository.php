@@ -18,7 +18,6 @@ class SeoableRepository
                 return $seoable;
             }
         } catch (Throwable $e) {
-            report($e);
         }
 
         return app(config('seo.fallback'));
@@ -49,7 +48,7 @@ class SeoableRepository
 
         // If not parameter is set, we check if a model instance has been injected
         if (!$attribute->parameter) {
-            return collect($parameters)->first(fn ($parameter, $key) => is_a($parameter, $attribute->model));
+            return collect($parameters)->first(fn($parameter, $key) => is_a($parameter, $attribute->model));
         }
 
         // If a parameter is set, we try to query the model
