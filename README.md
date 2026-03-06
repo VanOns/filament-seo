@@ -7,13 +7,14 @@ of the Filament Admin package and provides a simple way to manage SEO tags for y
 
 ### Compatibility
 
-For certain Filament versions, changes have to be made that render the package backwards incompatible with the previous version.
+For certain Filament versions, changes have to be made that render the package backwards incompatible with the previous
+version.
 Please see the table below to determine which version you need.
 
-| Version                                                      | Filament |
-|--------------------------------------------------------------|----------|
-| v2 (current)                                                 | \>=4.0   |
-| [v1](https://github.com/VanOns/filament-seo/tree/release/v1) | <4.0     |
+| Version                                                      | Filament          |
+|--------------------------------------------------------------|-------------------|
+| v2 (current)                                                 | \>=4.0 \|  \>=5.0 |
+| [v1](https://github.com/VanOns/filament-seo/tree/release/v1) | <4.0              |
 
 **Please note:** the `main` branch will always be the latest major version.
 
@@ -23,10 +24,10 @@ Because this package is not published to Packagist, you need to add it as a repo
 
 ```json
 "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/VanOns/filament-seo"
-    }
+{
+"type": "vcs",
+"url": "https://github.com/VanOns/filament-seo"
+}
 ]
 ```
 
@@ -120,9 +121,9 @@ routing.
 This can be done in two ways:
 
 1. Use the `VanOns\FilamentSeo\Attributes\Seoable` attribute and give it
-the class to load.
+   the class to load.
 2. Load the `VanOns\FilamentSeo\SeoService` and call the `setSeoAble()` method
-with the object to load the SEO attribute for.
+   with the object to load the SEO attribute for.
 
 ```php
 namespace App\Http\Controllers;
@@ -150,12 +151,16 @@ class ShowPage extends Controller
 ```
 
 ### SEO Analysis
+
 The package comes with a set of default SEO analysis rules that help you optimize your content for search engines.
 The default rules include checks for keyword density, meta description length, header tags, and more.
-More rules can be added by creating classes that implement the `VanOns\FilamentSeo\SEO\Analysis\AnalyserInterface` interface.
+More rules can be added by creating classes that implement the `VanOns\FilamentSeo\SEO\Analysis\AnalyserInterface`
+interface.
 These rules can be registered in multiple ways:
 
-**Option 1**: Publish the config file using the command `php artisan vendor:publish --tag=seo-config` and add your custom analysers to the `default_analysers` array in the `config/seo.php` file.
+**Option 1**: Publish the config file using the command `php artisan vendor:publish --tag=seo-config` and add your
+custom analysers to the `default_analysers` array in the `config/seo.php` file.
+
 ```php
     'analysis' => [
         'default_analysers' => [
@@ -172,7 +177,9 @@ These rules can be registered in multiple ways:
         ],
     ],
 ```
+
 **Option 2**: Use the `AnalyserRegistry` facade to register your custom analysers in a service provider's boot method.
+
 ```php
 use VanOns\FilamentSeo\Facades\AnalyserRegistry;
 
@@ -186,6 +193,7 @@ public function boot()
     ]);
 }
 ```
+
 **Option 3**: Use the `AnalyserRegistry` facade to filter the default analysers in a service provider's boot method.
 This is useful if you need to modify the analysers based on the model being analysed.
 
@@ -208,7 +216,9 @@ public function boot()
 ```
 
 ### AI Metadata Generation
-The package includes functionality to generate SEO metadata using AI. To enable this feature you need to set up your .env file with the following variables:
+
+The package includes functionality to generate SEO metadata using AI. To enable this feature you need to set up your
+.env file with the following variables:
 
 ```dotenv
 # Enable or disable AI metadata generation
@@ -220,14 +230,17 @@ SEO_AI_MODEL=gpt-4o
 ```
 
 PrismPHP is used to interact with AI providers, more information on compatible providers and models can be found in the
-[PrismPHP documentation](https://prismphp.com). For example, to use OpenAI as the AI provider, you need to set the `OPENAI_API_KEY` in your `.env` file:
+[PrismPHP documentation](https://prismphp.com). For example, to use OpenAI as the AI provider, you need to set the
+`OPENAI_API_KEY` in your `.env` file:
 
 ```dotenv
 OPENAI_API_KEY=KEY_HERE
 ```
 
 ### Sitemaps
-The package provides a simple way to generate sitemaps for your models. Your model must implement the `Sitemapable` interface, when you implement `Seoable` and use the `HasSeoFields` trait, this is done automatically.
+
+The package provides a simple way to generate sitemaps for your models. Your model must implement the `Sitemapable`
+interface, when you implement `Seoable` and use the `HasSeoFields` trait, this is done automatically.
 You can register sitemaps in a service provider's boot method using the `SitemapRegistry` facade:
 
 ```php
@@ -250,7 +263,10 @@ public function boot()
         ]);
 }
 ```
-The sitemap routes get registered automatically, you can find them at `/sitemaps/{slug}.xml`. You can disable the routes from your .env file:
+
+The sitemap routes get registered automatically, you can find them at `/sitemaps/{slug}.xml`. You can disable the routes
+from your .env file:
+
 ```dotenv
 SEO_SITEMAP_ENABLED=false
 ```
