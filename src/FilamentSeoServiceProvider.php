@@ -42,7 +42,7 @@ class FilamentSeoServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../config/seo.php' => config_path('seo.php'),
-        ], 'config');
+        ], 'filament-seo-config');
     }
 
     public function registerRoute(): void
@@ -57,7 +57,7 @@ class FilamentSeoServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'filament-seo');
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/filament-seo'),
-        ], 'views');
+        ], 'filament-seo-views');
     }
 
     public function registerComponents(): void
@@ -77,6 +77,6 @@ class FilamentSeoServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'filament-seo');
         $this->publishes([
             __DIR__ . '/../resources/lang' => $this->app->langPath('vendor/filament-seo'),
-        ], 'lang');
+        ], 'filament-seo-lang');
     }
 }

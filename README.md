@@ -158,7 +158,7 @@ More rules can be added by creating classes that implement the `VanOns\FilamentS
 interface.
 These rules can be registered in multiple ways:
 
-**Option 1**: Publish the config file using the command `php artisan vendor:publish --tag=seo-config` and add your
+**Option 1**: Publish the config file using the command `php artisan vendor:publish --tag=filament-seo-config` and add your
 custom analysers to the `default_analysers` array in the `config/seo.php` file.
 
 ```php
