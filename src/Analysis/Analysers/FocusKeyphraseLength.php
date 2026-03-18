@@ -21,7 +21,7 @@ class FocusKeyphraseLength implements AnalyserInterface
         return match(true) {
             $words === 0 => new AnalysisResult(AnalysisStatus::FAILED, __('filament-seo::seo.focus_keyphrase.missing')),
             $words > 0 && $words <= $this->words => new AnalysisResult(AnalysisStatus::PASSED, __('filament-seo::seo.focus_keyphrase.length_correct')),
-            $words > $this->words && $words <= $this->words * 2 => new AnalysisResult(AnalysisStatus::WARNING, __('filament-seo::seo.focus_keyphrase.length_long', ['count' => $this->words])),
+            $words > $this->words && $words <= ($this->words * 2) => new AnalysisResult(AnalysisStatus::WARNING, __('filament-seo::seo.focus_keyphrase.length_long', ['count' => $this->words])),
             default => new AnalysisResult(AnalysisStatus::FAILED, __('filament-seo::seo.focus_keyphrase.length_very_long', ['count' => $this->words])),
         };
     }

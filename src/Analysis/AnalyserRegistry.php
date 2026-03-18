@@ -46,7 +46,7 @@ class AnalyserRegistry
         );
     }
 
-    public function getAnalysers(Seoable $seoable = null): array
+    public function getAnalysers(Seoable|null $seoable = null): array
     {
         if (isset($this->filterCallback)) {
             return ($this->filterCallback)($this->analysers->all(), $seoable);
