@@ -105,11 +105,11 @@ class SeoService
     public function title(string $tag = 'title'): string
     {
         $parts = $this->data()[$tag] ?? [];
+        $text = is_array($parts)
+            ? implode($this->settings->titleSeparator(), $parts)
+            : $parts;
 
-        $parts[] = $this->settings->title();
-        $separator = $this->settings->titleSeparator();
-
-        return implode(" {$separator} ", $parts);
+        return $text . $this->settings->getSuffix();
     }
 
     public function ogTitle(): string

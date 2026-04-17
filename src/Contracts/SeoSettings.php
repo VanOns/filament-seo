@@ -8,6 +8,10 @@ interface SeoSettings
 
     public function titleSeparator(): string;
 
+    public function suffixEnabled(): bool;
+
+    public function getSuffix(): ?string;
+
     public function ogImage(): ?string;
 
     public function noindex(): bool;
