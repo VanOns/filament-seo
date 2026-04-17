@@ -17,6 +17,7 @@ return [
         'config' => [
             'title' => env('APP_NAME'),
             'title_separator' => '-',
+            'enable_suffix' => true,
             'og_image' => null,
             'noindex' => false,
         ],

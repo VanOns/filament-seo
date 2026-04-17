@@ -8,19 +8,19 @@ use Filament\Schemas\Components\Utilities\Get;
 use VanOns\FilamentSeo\AI\Prompts\GeneratePageTitle;
 use VanOns\FilamentSeo\Concerns\HasMetadataGeneration;
 use VanOns\FilamentSeo\Concerns\HasRecommendedLength;
+use VanOns\FilamentSeo\Contracts\SeoSettings;
 use VanOns\FilamentSeo\Schemas\RecommendedLength;
 
 class SeoTitleInput extends TextInput
 {
     use HasRecommendedLength;
     use HasMetadataGeneration;
+
     protected ?string $fallbackField = 'title';
 
     public function setUp(): void
     {
-        $suffix = ' - ' . config('app.name');
-
-        $this->suffix($suffix)
+        $this->suffix(app(SeoSettings::class)->getSuffix())
             ->live()
             ->belowContent(function (?string $state, Get $get) {
                 return RecommendedLength::make()

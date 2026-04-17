@@ -13,8 +13,23 @@ class ConfigSettingsDriver implements SeoSettings
 
     public function titleSeparator(): string
     {
-        return config('seo.settings.config.title_separator');
+        $separator = trim(config('seo.settings.config.title_separator'));
 
+        return " {$separator} ";
+    }
+
+    public function suffixEnabled(): bool
+    {
+        return config('seo.settings.config.enable_suffix');
+    }
+
+    public function getSuffix(): ?string
+    {
+        if (!$this->suffixEnabled()) {
+            return null;
+        }
+
+        return $this->titleSeparator() . $this->title();
     }
 
     public function ogImage(): ?string
