@@ -48,7 +48,10 @@ class SeoableRepository
 
         // If not parameter is set, we check if a model instance has been injected
         if (!$attribute->parameter) {
-            return collect($parameters)->first(fn($parameter, $key) => is_a($parameter, $attribute->model));
+            /** @var Seoable|null $return */
+            $return = collect($parameters)->first(fn ($parameter, $key) => is_a($parameter, $attribute->model));
+
+            return $return;
         }
 
         // If a parameter is set, we try to query the model
