@@ -106,7 +106,7 @@ class SeoService
     {
         $parts = $this->data()[$tag] ?? [];
         $text = is_array($parts)
-            ? implode(' - ', $parts)
+            ? implode($this->settings->titleSeparator(), $parts)
             : $parts;
 
         return $text . $this->settings->getSuffix();
