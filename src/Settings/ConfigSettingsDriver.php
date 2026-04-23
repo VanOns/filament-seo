@@ -8,19 +8,19 @@ class ConfigSettingsDriver implements SeoSettings
 {
     public function title(): string
     {
-        return config('seo.settings.config.title');
+        return config('seo.settings.config.title', '');
     }
 
     public function titleSeparator(): string
     {
-        $separator = trim(config('seo.settings.config.title_separator'));
+        $separator = trim(config('seo.settings.config.title_separator', ''));
 
         return " {$separator} ";
     }
 
     public function suffixEnabled(): bool
     {
-        return config('seo.settings.config.enable_suffix');
+        return config('seo.settings.config.enable_suffix', false);
     }
 
     public function getSuffix(): ?string
@@ -35,11 +35,10 @@ class ConfigSettingsDriver implements SeoSettings
     public function ogImage(): ?string
     {
         return config('seo.settings.config.og_image');
-
     }
 
     public function noindex(): bool
     {
-        return config('seo.settings.config.noindex');
+        return config('seo.settings.config.noindex', false);
     }
 }
