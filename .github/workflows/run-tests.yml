@@ -50,9 +50,8 @@ jobs:
           composer config github-oauth.github.com ${{ secrets.TOKEN_GITHUB }}
 
       - name: ⬇️Install Composer dependencies
-        env:
-          COMPOSER_NO_AUDIT: 1
         run: |
+          composer config --global --no-interaction policy.advisories.block false
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
           composer require --dev "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} -W --prefer-dist --no-progress --no-ansi --no-interaction
