@@ -1,81 +1,36 @@
+<p align="center"><img src="art/social-card.png" alt="Social card of Filament SEO"></p>
+
 # Filament SEO
 
-Filament SEO is a package that provides a simple way to manage SEO tags for your Laravel application. It is built on top
-of the Filament Admin package and provides a simple way to manage SEO tags for your Laravel application.
+[![Tests](https://github.com/VanOns/filament-seo/actions/workflows/run-tests.yml/badge.svg)](https://github.com/VanOns/filament-seo/actions/workflows/run-tests.yml)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/van-ons/filament-seo.svg)](https://packagist.org/packages/van-ons/filament-seo)
+[![License](https://img.shields.io/packagist/l/van-ons/filament-seo.svg)](LICENSE.md)
+
+Add SEO management to your Filament admin panel — meta tags, SEO analysis, AI-generated metadata, and sitemaps.
 
 ## Quick start
 
-### Compatibility
-
-For certain Filament versions, changes have to be made that render the package backwards incompatible with the previous
-version.
-Please see the table below to determine which version you need.
-
-| Version                                                      | Filament          |
-|--------------------------------------------------------------|-------------------|
-| v2 (current)                                                 | \>=4.0 \|  \>=5.0 |
-| [v1](https://github.com/VanOns/filament-seo/tree/release/v1) | <4.0              |
-
-**Please note:** the `main` branch will always be the latest major version.
+> For Filament version compatibility, see [Compatibility](docs/compatibility.md).
 
 ### Installation
 
-Because this package is not published to Packagist, you need to add it as a repository in your `composer.json` file:
-
-```json
-"repositories": [
-{
-"type": "vcs",
-"url": "https://github.com/VanOns/filament-seo"
-}
-]
-```
-
-Then, require the package:
-
 ```bash
-composer require van-ons/filament-seo:^2.0
+composer require van-ons/filament-seo
 ```
 
 ### Model preparation
 
-Your model must have a seo column, add a migration to add the column to your model:
+Add a `seo` column to your model's table:
 
 ```php
-public function up(): void
-    {
-        Schema::table('pages', function (Blueprint $table) {
-            $table->json('seo')->nullable();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('pages', function (Blueprint $table) {
-            $table->dropColumn('seo');
-        });
-    }
-}
+Schema::table('pages', function (Blueprint $table) {
+    $table->json('seo')->nullable();
+});
 ```
 
-Your model must implement the `VanOns\FilamentSeo\Contracts\Seoable` contract,
-the package provides the `VanOns\FilamentSeo\Contracts\Seoable` trait with sensible
-defaults.
-
-You must provide the url to your model yourself, as specified in the HasUrl contract:
-`public function url(): string;`
-
-#### Example
-
-In the end your model should look something like this:
+Implement the `Seoable` contract on your model:
 
 ```php
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
 use VanOns\FilamentSeo\Concerns\HasSeoFields;
 use VanOns\FilamentSeo\Contracts\Seoable;
 
@@ -90,203 +45,55 @@ class Page extends Model implements Seoable
 }
 ```
 
-### Implement fields in Filament resource
-
-You can add the SEO fields to your form using your model's static
-`getSeoFields();` function.
-
-An example:
+### Add fields to your Filament resource
 
 ```php
-Filament\Forms\Components\Tabs::make()
-    ->tabs([
-        ...your form,
-        Filament\Forms\Components\Tabs\Tab::make('seo')->schema(App\Models\Page::getSeoFields()),
-    ]),
+Filament\Forms\Components\Tabs\Tab::make('seo')
+    ->schema(App\Models\Page::getSeoFields()),
 ```
 
 ### Add the view to your layout
-
-To make the SEO data available, add the blade component to your app's layout file:
 
 ```blade
 <x-filament-seo::head />
 ```
 
-### Load SEO data for your views
+## Documentation
 
-In order for the model's seo data to be shown on a page, you must load it while
-routing.
+Please see the [documentation](docs) for detailed information about installation and usage.
 
-This can be done in two ways:
+## Contributing
 
-1. Use the `VanOns\FilamentSeo\Attributes\Seoable` attribute and give it
-   the class to load.
-2. Load the `VanOns\FilamentSeo\SeoService` and call the `setSeoAble()` method
-   with the object to load the SEO attribute for.
+Please see [Contributing](CONTRIBUTING.md) for more information about how you can contribute.
 
-```php
-namespace App\Http\Controllers;
+## Testing
 
-use App\Models\Page;
-use Illuminate\View\View;
-use VanOns\FilamentSeo\Attributes\Seoable;
-use VanOns\FilamentSeo\SeoService;
-
-class ShowPage extends Controller
-{
-    //option 1
-    #[Seoable(Page::class)]
-    public function show(Page $page): View
-    {
-        //option 2
-        app(SeoService::class)->setSeoable($page);
-
-        return view('page.show', [
-            'page' => $page,
-        ]);
-    }
-}
-
+```bash
+composer test
 ```
 
-### SEO Analysis
+## Changelog
 
-The package comes with a set of default SEO analysis rules that help you optimize your content for search engines.
-The default rules include checks for keyword density, meta description length, header tags, and more.
-More rules can be added by creating classes that implement the `VanOns\FilamentSeo\SEO\Analysis\AnalyserInterface`
-interface.
-These rules can be registered in multiple ways:
+Please see [Changelog](CHANGELOG.md) for more information about what has changed recently.
 
-**Option 1**: Publish the config file using the command `php artisan vendor:publish --tag=filament-seo-config` and add your
-custom analysers to the `default_analysers` array in the `config/seo.php` file.
+## Upgrading
 
-```php
-    'analysis' => [
-        'default_analysers' => [
-            TitleLength::class,
-            DescriptionLength::class,
-            ContentLength::class,
-            FocusKeyphraseLength::class,
-            FocusKeyphraseInContent::class,
-            FocusKeyphraseInTitle::class,
-            FocusKeyphraseInDescription::class,
-            FocusKeyphraseInUrl::class,
-            FocusKeyPhraseUnique::class,
-            MyAnalyser::class, // Add your custom analyser class here
-        ],
-    ],
-```
+Please see [Upgrading](UPGRADING.md) for more information about how to upgrade.
 
-**Option 2**: Use the `AnalyserRegistry` facade to register your custom analysers in a service provider's boot method.
+## Security
 
-```php
-use VanOns\FilamentSeo\Facades\AnalyserRegistry;
+Please see [Security](SECURITY.md) for more information about how we deal with security.
 
-...
+## Credits
 
-public function boot()
-{
-    AnalyserRegistry::register([
-        MyAnalyser::class, // Register using the class name
-        new MyAnalyser(), // Or register using an instance, this may be useful if your analyser has dependencies or requires configuration
-    ]);
-}
-```
+We would like to thank the following contributors for their contributions to this project:
 
-**Option 3**: Use the `AnalyserRegistry` facade to filter the default analysers in a service provider's boot method.
-This is useful if you need to modify the analysers based on the model being analysed.
+- [All contributors](../../contributors)
 
-```php
-use VanOns\FilamentSeo\Facades\AnalyserRegistry;
+## License
 
-...
+The scripts and documentation in this project are released under the [MIT License](LICENSE.md).
 
-public function boot()
-{
-    AnalyserRegistry::filter(function (array $analysers, \VanOns\FilamentSeo\Contracts\Seoable $seoable) {
-        if ($seoable instanceof \App\Models\SpecialPage) {
-            // Modify the analysers for SpecialPage model
-            $analysers[] = SpecialPageAnalyser::class;
-        }
-        
-        return $analysers;
-    });
-}
-```
+---
 
-### AI Metadata Generation
-
-The package includes functionality to generate SEO metadata using AI. To enable this feature you need to set up your
-.env file with the following variables:
-
-```dotenv
-# Enable or disable AI metadata generation
-SEO_AI_ENABLED=true
-# Specify the AI provider
-SEO_AI_PROVIDER=openai
-# Specify the AI model to use
-SEO_AI_MODEL=gpt-4o
-```
-
-PrismPHP is used to interact with AI providers, more information on compatible providers and models can be found in the
-[PrismPHP documentation](https://prismphp.com). For example, to use OpenAI as the AI provider, you need to set the
-`OPENAI_API_KEY` in your `.env` file:
-
-```dotenv
-OPENAI_API_KEY=KEY_HERE
-```
-
-### Sitemaps
-
-The package provides a simple way to generate sitemaps for your models. Your model must implement the `Sitemapable`
-interface, when you implement `Seoable` and use the `HasSeoFields` trait, this is done automatically.
-You can register sitemaps in a service provider's boot method using the `SitemapRegistry` facade:
-
-```php
-use VanOns\FilamentSeo\Facades\SitemapRegistry;
-
-...
-
-public function boot()
-{
-        SitemapRegistry::register([
-            // Generate sitemap from a query
-            Sitemap::fromQuery('pages', Page::published()),
-            // Generate sitemap from a model
-            Sitemap::fromModel('articles', Article::class),
-            // Manually create a sitemap
-            new Sitemap(
-                slug: 'home',
-                urls: collect([ new SitemapUrl(url('/')) ])
-            ),
-        ]);
-}
-```
-
-The sitemap routes get registered automatically, you can find them at `/sitemaps/{slug}.xml`. You can disable the routes
-from your .env file:
-
-```dotenv
-SEO_SITEMAP_ENABLED=false
-```
-
-### Middleware
-
-This package comes with middleware to prevent indexing by search engines for
-non-production sites. The middleware is automatically loaded, no extra steps are
-required.
-
-The middleware can be found in `VanOns\FilamentSeo\Http\Middleware\NoIndex.php`.
-
-The following checks are done before adding the
-[X-Robots-Tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Robots-Tag)
-with value `none`:
-
-- Your `APP_ENV` is not equal to `production`.
-- The config value `seo.no-index` is false, derived from `env(APP_SEO_NO_INDEX)`,
-
-This should ensure non-production websites are never indexed.
-
-To discourage search engine indexing on production, add `APP_SEO_NO_INDEX = true`
-to your `.env` file, or change the value in the `config/seo.php` config file.
+<p align="center"><a href="https://van-ons.nl/" target="_blank"><img src="https://opensource.van-ons.nl/files/cow.png" width="50" alt="Logo of Van Ons"></a></p>
