@@ -1,36 +1,18 @@
+<p align="center"><img src="art/social-card.png" alt="Social card of Filament SEO"></p>
+
 # Filament SEO
 
-Filament SEO is a package that provides a simple way to manage SEO tags for your Laravel application. It is built on top
-of the Filament Admin package and provides a simple way to manage SEO tags for your Laravel application.
+[![Tests](https://github.com/VanOns/filament-seo/actions/workflows/run-tests.yml/badge.svg)](https://github.com/VanOns/filament-seo/actions/workflows/run-tests.yml)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/van-ons/filament-seo.svg)](https://packagist.org/packages/van-ons/filament-seo)
+[![License](https://img.shields.io/packagist/l/van-ons/filament-seo.svg)](LICENSE.md)
+
+Add SEO management to your Filament admin panel — meta tags for your models, made available in your app's layout.
 
 ## Quick start
 
-### Compatibility
-
-For certain Filament versions, changes have to be made that render the package backwards incompatible with the previous version.
-Please see the table below to determine which version you need.
-
-| Version                                                | Filament |
-|--------------------------------------------------------|----------|
-| [v2](https://github.com/VanOns/filament-seo/tree/main) | \>=4.0   |
-| v1 (current)                                           | <4.0     |
-
-**Please note:** the `main` branch will always be the latest major version.
+> For Filament version compatibility, see [Compatibility](docs/compatibility.md).
 
 ### Installation
-
-Because this package is not published to Packagist, you need to add it as a repository in your `composer.json` file:
-
-```json
-"repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/VanOns/filament-seo"
-    }
-]
-```
-
-Then, require the package:
 
 ```bash
 composer require van-ons/filament-seo:^1.0
@@ -38,43 +20,17 @@ composer require van-ons/filament-seo:^1.0
 
 ### Model preparation
 
-Your model must have a seo column, add a migration to add the column to your model:
+Add a `seo` column to your model's table:
 
 ```php
-public function up(): void
-    {
-        Schema::table('pages', function (Blueprint $table) {
-            $table->json('seo')->nullable();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('pages', function (Blueprint $table) {
-            $table->dropColumn('seo');
-        });
-    }
-}
+Schema::table('pages', function (Blueprint $table) {
+    $table->json('seo')->nullable();
+});
 ```
 
-Your model must implement the `VanOns\FilamentSeo\Contracts\Seoable` contract,
-the package provides the `VanOns\FilamentSeo\Contracts\Seoable` trait with sensible
-defaults.
-
-You must provide the url to your model yourself, as specified in the HasUrl contract:
-`public function url(): string;`
-
-#### Example
-
-In the end your model should look something like this:
+Implement the `Seoable` contract on your model:
 
 ```php
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
 use VanOns\FilamentSeo\Concerns\HasSeoFields;
 use VanOns\FilamentSeo\Contracts\Seoable;
 
@@ -89,82 +45,55 @@ class Page extends Model implements Seoable
 }
 ```
 
-### Implement fields in Filament resource
-
-You can add the SEO fields to your form using your model's static
-`getSeoFields();` function.
-
-An example:
+### Add fields to your Filament resource
 
 ```php
-Filament\Forms\Components\Tabs::make()
-    ->tabs([
-        ...your form,
-        Filament\Forms\Components\Tabs\Tab::make('seo')->schema(App\Models\Page::getSeoFields()),
-    ]),
+Filament\Forms\Components\Tabs\Tab::make('seo')
+    ->schema(App\Models\Page::getSeoFields()),
 ```
 
 ### Add the view to your layout
-
-To make the SEO data available, add the blade component to your app's layout file:
 
 ```blade
 <x-filament-seo::head />
 ```
 
-### Load SEO data for your views
+## Documentation
 
-In order for the model's seo data to be shown on a page, you must load it while
-routing.
+Please see the [documentation](docs) for detailed information about installation and usage.
 
-This can be done in two ways:
+## Contributing
 
-1. Use the `VanOns\FilamentSeo\Attributes\Seoable` attribute and give it
-the class to load.
-2. Load the `VanOns\FilamentSeo\SeoService` and call the `setSeoAble()` method
-with the object to load the SEO attribute for.
+Please see [Contributing](CONTRIBUTING.md) for more information about how you can contribute.
 
-```php
-namespace App\Http\Controllers;
+## Testing
 
-use App\Models\Page;
-use Illuminate\View\View;
-use VanOns\FilamentSeo\Attributes\Seoable;
-use VanOns\FilamentSeo\SeoService;
-
-class ShowPage extends Controller
-{
-    //option 1
-    #[Seoable(Page::class)]
-    public function show(Page $page): View
-    {
-        //option 2
-        app(SeoService::class)->setSeoable($page);
-
-        return view('page.show', [
-            'page' => $page,
-        ]);
-    }
-}
-
+```bash
+composer test
 ```
 
-### Middleware
+## Changelog
 
-This package comes with middleware to prevent indexing by search engines for
-non-production sites. The middleware is automatically loaded, no extra steps are
-required.
+Please see [Changelog](CHANGELOG.md) for more information about what has changed recently.
 
-The middleware can be found in `VanOns\FilamentSeo\Http\Middleware\NoIndex.php`.
+## Upgrading
 
-The following checks are done before adding the
-[X-Robots-Tag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Robots-Tag)
-with value `none`:
+Please see [Upgrading](UPGRADING.md) for more information about how to upgrade.
 
-- Your `APP_ENV` is not equal to `production`.
-- The config value `seo.no-index` is false, derived from `env(APP_SEO_NO_INDEX)`,
+## Security
 
-This should ensure non-production websites are never indexed.
+Please see [Security](SECURITY.md) for more information about how we deal with security.
 
-To discourage search engine indexing on production, add `APP_SEO_NO_INDEX = true`
-to your `.env` file, or change the value in the `config/seo.php` config file.
+## Credits
+
+We would like to thank the following contributors for their contributions to this project:
+
+- [All contributors](../../contributors)
+
+## License
+
+The scripts and documentation in this project are released under the [MIT License](LICENSE.md).
+
+---
+
+<p align="center"><a href="https://van-ons.nl/" target="_blank"><img src="https://opensource.van-ons.nl/files/cow.png" width="50" alt="Logo of Van Ons"></a></p>
