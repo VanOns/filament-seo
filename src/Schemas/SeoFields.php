@@ -49,14 +49,16 @@ class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
     {
         return Toggle::make($this->seoPrefix . 'noindex')
             ->label(__('filament-seo::seo.no_index'))
-            ->helperText(__('filament-seo::seo.no_index_help'));
+            ->helperText(__('filament-seo::seo.no_index_help'))
+            ->live();
     }
 
     public function noFollowField(): Field
     {
         return Toggle::make($this->seoPrefix . 'nofollow')
             ->label(__('filament-seo::seo.no_follow'))
-            ->helperText(__('filament-seo::seo.no_follow_help'));
+            ->helperText(__('filament-seo::seo.no_follow_help'))
+            ->live();
     }
 
     public function canonicalField(): Field
@@ -77,7 +79,8 @@ class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
         return TextInput::make($this->seoPrefix . 'canonical_url')
             ->label(__('filament-seo::seo.custom_url'))
             ->placeholder(__('https://example.com/page'))
-            ->hidden(fn (Get $get) => $get($this->seoPrefix . 'canonical') !== 'url');
+            ->hidden(fn (Get $get) => $get($this->seoPrefix . 'canonical') !== 'url')
+            ->live(onBlur: true);
     }
 
     public function ogTitleField(): Field

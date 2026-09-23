@@ -1,5 +1,6 @@
 <?php
 
+use VanOns\FilamentSeo\Analysis\Analysers\Canonical;
 use VanOns\FilamentSeo\Analysis\Analysers\ContentLength;
 use VanOns\FilamentSeo\Analysis\Analysers\DescriptionLength;
 use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseInContent;
@@ -8,6 +9,8 @@ use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseInTitle;
 use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseInUrl;
 use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyphraseLength;
 use VanOns\FilamentSeo\Analysis\Analysers\FocusKeyPhraseUnique;
+use VanOns\FilamentSeo\Analysis\Analysers\Indexable;
+use VanOns\FilamentSeo\Analysis\Analysers\Sitemap;
 use VanOns\FilamentSeo\Analysis\Analysers\TitleLength;
 
 return [
@@ -74,6 +77,9 @@ return [
             FocusKeyphraseInDescription::class,
             FocusKeyphraseInUrl::class,
             FocusKeyPhraseUnique::class,
+            Indexable::class,
+            Canonical::class,
+            Sitemap::class,
         ],
     ],
 
