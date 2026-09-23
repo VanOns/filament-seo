@@ -120,11 +120,19 @@ trait HasSeoFields
         return Arr::get($this, $column)?->format('Y-m-d');
     }
 
+    public function getExcludeFromSitemap(): bool
+    {
+        return (bool) Arr::get($this, static::$seoPrefix . 'exclude_from_sitemap', false);
+    }
+
+    public function shouldBeInSitemap(): bool
+    {
+        return $this->url() && !$this->getExcludeFromSitemap();
+    }
+
     public function toSitemapUrl(): ?SitemapUrl
     {
-        $url = $this->url();
-
-        if (!$url) {
+        if (!$this->shouldBeInSitemap()) {
             return null;
         }
 

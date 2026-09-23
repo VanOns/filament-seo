@@ -88,6 +88,16 @@ trait HasSeoGetters
         return null;
     }
 
+    public function getExcludeFromSitemap(): bool
+    {
+        return false;
+    }
+
+    public function shouldBeInSitemap(): bool
+    {
+        return false;
+    }
+
     public function toSitemapUrl(): ?SitemapUrl
     {
         return null;

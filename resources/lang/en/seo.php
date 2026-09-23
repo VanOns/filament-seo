@@ -59,6 +59,8 @@ return [
     'social_title' => 'Social title',
     'social_description' => 'Social description',
     'social_image' => 'Social image',
+    'exclude_from_sitemap' => 'Exclude from sitemap',
+    'exclude_from_sitemap_help' => 'Leave this page out of the sitemap',
     'change_frequency' => 'Change Frequency',
     'change_frequency_help' => 'How frequently the content at this URL is likely to change',
     'priority' => 'Priority',
