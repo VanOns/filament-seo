@@ -48,6 +48,20 @@ return [
         'too_much_in_content' => 'De focus keyphrase komt :count keer voor in je content, dat is meer dan het aanbevolen maximum van :recommended voor deze contentlengte',
         'not_in_content' => 'De focus keyphrase is niet aanwezig in je content',
     ],
+    'indexable' => [
+        'indexable' => 'Deze pagina kan door zoekmachines worden geïndexeerd',
+        'no_index' => 'Deze pagina staat op no-index en wordt niet door zoekmachines geïndexeerd',
+        'site_no_index' => 'De hele site staat op no-index, dus deze pagina wordt niet door zoekmachines geïndexeerd',
+        'non_production' => 'Dit is geen productieomgeving, dus zoekmachines mogen deze pagina niet indexeren',
+    ],
+    'canonical' => [
+        'self' => 'De canonical URL verwijst naar deze pagina',
+        'points_elsewhere' => 'De canonical URL verwijst naar :url',
+    ],
+    'sitemap_analysis' => [
+        'included' => 'Deze pagina staat in de sitemap',
+        'excluded' => 'Deze pagina is uitgesloten van de sitemap',
+    ],
     'no_index' => 'No-index',
     'no_index_help' => 'Voorkom dat zoekmachines deze pagina indexeren',
     'no_follow' => 'No-follow',

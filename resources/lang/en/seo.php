@@ -48,6 +48,20 @@ return [
         'too_much_in_content' => 'The focus keyphrase is found :count times in your content, that is more than the maximum recommended of :recommended for this content length',
         'not_in_content' => 'The focus keyphrase is not present in your content',
     ],
+    'indexable' => [
+        'indexable' => 'This page can be indexed by search engines',
+        'no_index' => 'This page is set to noindex and will not be indexed by search engines',
+        'site_no_index' => 'The entire site is set to noindex, so this page will not be indexed by search engines',
+        'non_production' => 'This is not a production environment, so search engines are blocked from indexing this page',
+    ],
+    'canonical' => [
+        'self' => 'The canonical URL points to this page',
+        'points_elsewhere' => 'The canonical URL points to :url',
+    ],
+    'sitemap_analysis' => [
+        'included' => 'This page is included in the sitemap',
+        'excluded' => 'This page is excluded from the sitemap',
+    ],
     'no_index' => 'Noindex',
     'no_index_help' => 'Prevent search engines from indexing this page',
     'no_follow' => 'Nofollow',
