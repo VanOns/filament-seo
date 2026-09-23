@@ -45,7 +45,7 @@ class Sitemap
                 function (Sitemapable $seoable) {
                     return $seoable->toSitemapUrl();
                 }
-            );
+            )->filter()->values();
         }
 
         return collect();

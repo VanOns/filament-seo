@@ -59,6 +59,8 @@ return [
     'social_title' => 'Social titel',
     'social_description' => 'Social beschrijving',
     'social_image' => 'Social afbeelding',
+    'exclude_from_sitemap' => 'Uitsluiten van sitemap',
+    'exclude_from_sitemap_help' => 'Laat deze pagina weg uit de sitemap',
     'change_frequency' => 'Wijzigingsfrequentie',
     'change_frequency_help' => 'Hoe vaak de inhoud op deze URL waarschijnlijk verandert',
     'priority' => 'Prioriteit',

@@ -110,6 +110,14 @@ class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
             ->directory('social-images');
     }
 
+    public function excludeFromSitemapField(): Field
+    {
+        return Toggle::make($this->seoPrefix . 'exclude_from_sitemap')
+            ->label(__('filament-seo::seo.exclude_from_sitemap'))
+            ->helperText(__('filament-seo::seo.exclude_from_sitemap_help'))
+            ->live();
+    }
+
     public function changeFrequencyField(): Field
     {
         return Select::make($this->seoPrefix . 'change_frequency')
@@ -123,7 +131,8 @@ class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
                 'monthly' => __('filament-seo::seo.frequency.monthly'),
                 'yearly' => __('filament-seo::seo.frequency.yearly'),
                 'never' => __('filament-seo::seo.frequency.never'),
-            ]);
+            ])
+            ->hidden(fn (Get $get) => (bool) $get($this->seoPrefix . 'exclude_from_sitemap'));
     }
 
     public function priorityField(): Field
@@ -142,7 +151,8 @@ class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
                 '0.8' => '0.8',
                 '0.9' => '0.9',
                 '1.0' => '1.0',
-            ]);
+            ])
+            ->hidden(fn (Get $get) => (bool) $get($this->seoPrefix . 'exclude_from_sitemap'));
     }
 
     public function focusKeyphraseField(): Field
@@ -187,6 +197,7 @@ class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
                         $this->ogImageField(),
                     ]),
                     Section::make(__('filament-seo::seo.sitemap'))->schema([
+                        $this->excludeFromSitemapField(),
                         $this->changeFrequencyField(),
                         $this->priorityField(),
                     ]),
