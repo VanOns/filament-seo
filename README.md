@@ -271,6 +271,12 @@ from your .env file:
 SEO_SITEMAP_ENABLED=false
 ```
 
+Instances set to `noindex` are left out of the sitemap. To keep them in:
+
+```dotenv
+SEO_SITEMAP_EXCLUDE_NOINDEX=false
+```
+
 ### Middleware
 
 This package comes with middleware to prevent indexing by search engines for
