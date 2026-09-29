@@ -109,5 +109,8 @@ return [
     */
     'sitemap' => [
         'routes_enabled' => env('SEO_SITEMAP_ENABLED', true),
+
+        // Keep instances that are set to noindex out of the sitemap.
+        'exclude_noindex' => env('SEO_SITEMAP_EXCLUDE_NOINDEX', true),
     ],
 ];
