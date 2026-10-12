@@ -62,7 +62,7 @@ class ResourceSchema implements ResourceSchemaContract
             ->label(__('Canonical URL'))
             ->helperText(__('The preferred version of a set of pages with highly similar content'))
             ->options([
-                null => __('This page'),
+                '' => __('This page'),
                 'url' => __('Custom URL'),
             ])
             ->selectablePlaceholder(false)
