@@ -28,7 +28,7 @@ class GenerateMetadata extends Action
             ->action(function () {
                 $key = 'filament-seo-ai:' . (Auth::id() ?? request()->ip());
 
-                if (RateLimiter::tooManyAttempts($key, (int) config('seo.ai.rate_limit', 10))) {
+                if (RateLimiter::tooManyAttempts($key, (int) config('seo.ai.rate_limit', 60))) {
                     Notification::make()
                         ->title(__('filament-seo::seo.ai_rate_limited', ['seconds' => RateLimiter::availableIn($key)]))
                         ->danger()
@@ -37,7 +37,7 @@ class GenerateMetadata extends Action
                     return;
                 }
 
-                RateLimiter::hit($key);
+                RateLimiter::hit($key, (int) config('seo.ai.rate_limit_decay_seconds', 60));
 
                 $response = $this->prompt->seoable($this->seoable)->generate();
 

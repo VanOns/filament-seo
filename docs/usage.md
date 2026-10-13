@@ -123,6 +123,17 @@ OPENAI_API_KEY=your-key-here
 
 PrismPHP handles AI provider communication. See the [PrismPHP documentation](https://prismphp.com) for compatible providers and models.
 
+### Rate limiting
+
+AI generation is rate limited per user (or per IP when no user is logged in). By default a user can generate 60 times per 60 seconds. Change this in `config/seo.php` or `.env`:
+
+```dotenv
+# Maximum number of generations per window
+SEO_AI_RATE_LIMIT=60
+# Length of the window in seconds
+SEO_AI_RATE_LIMIT_DECAY_SECONDS=60
+```
+
 ## Sitemaps
 
 Your model automatically implements `Sitemapable` when it uses `HasSeoFields`. Register sitemaps in a service provider:
@@ -145,7 +156,7 @@ public function boot(): void
 
 `Sitemap::fromModel()` lists every row of the table, including drafts. Use `fromQuery()` with a scope when a model has unpublished records.
 
-Sitemaps are available at `/sitemap.xml` (index) and `/{slug}-sitemap.xml`. Disable via `.env`:
+Sitemaps are available at `/sitemap.xml` (index) and `/{slug}-sitemap.xml`. Disable via the config or `.env`:
 
 ```dotenv
 SEO_SITEMAP_ENABLED=false

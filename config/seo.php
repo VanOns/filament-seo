@@ -98,6 +98,7 @@ return [
         'provider' => env('SEO_AI_PROVIDER', 'openai'),
         'model' => env('SEO_AI_MODEL', 'gpt-4o'),
         'rate_limit' => env('SEO_AI_RATE_LIMIT', 60),
+        'rate_limit_decay_seconds' => env('SEO_AI_RATE_LIMIT_DECAY_SECONDS', 60),
     ],
 
     /*
