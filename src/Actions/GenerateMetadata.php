@@ -4,7 +4,10 @@ namespace VanOns\FilamentSeo\Actions;
 
 use Closure;
 use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 use VanOns\FilamentSeo\AI\Prompts\Prompt;
 use VanOns\FilamentSeo\Contracts\Seoable;
 
@@ -23,6 +26,19 @@ class GenerateMetadata extends Action
         $this->label(__('filament-seo::seo.use_ai'))
             ->icon(Heroicon::Sparkles)
             ->action(function () {
+                $key = 'filament-seo-ai:' . (Auth::id() ?? request()->ip());
+
+                if (RateLimiter::tooManyAttempts($key, (int) config('seo.ai.rate_limit', 60))) {
+                    Notification::make()
+                        ->title(__('filament-seo::seo.ai_rate_limited', ['seconds' => RateLimiter::availableIn($key)]))
+                        ->danger()
+                        ->send();
+
+                    return;
+                }
+
+                RateLimiter::hit($key, (int) config('seo.ai.rate_limit_decay_seconds', 60));
+
                 $response = $this->prompt->seoable($this->seoable)->generate();
 
                 if (isset($this->onResponse)) {

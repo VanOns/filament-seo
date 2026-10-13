@@ -132,6 +132,8 @@ Disable with `SEO_SITEMAP_ENABLED=false`.
 | `ai.enabled` (env `SEO_AI_ENABLED`) | Master switch for AI generate buttons. |
 | `ai.provider` (env `SEO_AI_PROVIDER`) | PrismPHP provider name (e.g. `openai`). |
 | `ai.model` (env `SEO_AI_MODEL`) | PrismPHP model name. |
+| `ai.rate_limit` (env `SEO_AI_RATE_LIMIT`) | Max AI generations per user per window, default `60`. |
+| `ai.rate_limit_decay_seconds` (env `SEO_AI_RATE_LIMIT_DECAY_SECONDS`) | Rate limit window length in seconds, default `60`. |
 | `sitemap.routes_enabled` (env `SEO_SITEMAP_ENABLED`) | Toggles route registration. |
 
 ### Conventions

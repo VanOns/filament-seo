@@ -65,7 +65,7 @@ public function boot(): void
 | Form | Use when |
 | --- | --- |
 | `Sitemap::fromQuery($slug, $builder)` | You need scopes (`->published()`, `->whereNotNull('url')`, soft-delete handling) or a specific order. **Most common.** |
-| `Sitemap::fromModel($slug, $modelClass)` | Every row of the table belongs in the sitemap, no filters. |
+| `Sitemap::fromModel($slug, $modelClass)` | Every row of the table belongs in the sitemap, no filters. Drafts and unpublished rows are listed publicly, so prefer `fromQuery()` when the model has any visibility state. |
 | `new Sitemap(slug:, urls: collect([...]))` | Static URLs (homepage, contact, etc.) or sources outside Eloquent. |
 
 ### Constructor signature

@@ -20,7 +20,7 @@ class FocusKeyPhraseUnique implements AnalyserInterface
     {
         $focusKeyphrase = $record->getFocusKeyphrase();
 
-        if (!$record instanceof Model) {
+        if (!$focusKeyphrase || !$record instanceof Model) {
             return null;
         }
 

@@ -18,6 +18,7 @@ class SeoableRepository
                 return $seoable;
             }
         } catch (Throwable $e) {
+            report($e);
         }
 
         return app(config('seo.fallback'));
@@ -56,7 +57,7 @@ class SeoableRepository
 
         // If a parameter is set, we try to query the model
         if (isset($parameters[$attribute->parameter])) {
-            return $attribute->model::where($attribute->column, $parameters[$attribute->parameter])->first();
+            return $attribute->model::where($attribute->column ?? $attribute->parameter, $parameters[$attribute->parameter])->first();
         }
 
         return null;

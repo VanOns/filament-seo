@@ -19,6 +19,7 @@ class Sitemap
         public ?Builder $query = null,
         public ?int $perPage = 1000,
     ) {
+        $this->perPage = max(1, $perPage ?? 1000);
     }
 
     public function url(int $page = 1): string

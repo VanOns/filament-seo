@@ -31,19 +31,8 @@ class GeneratePageTitle extends Prompt
         EOT;
     }
 
-    public function userPrompt(): string
+    public function maxLength(): int
     {
-        $focusKeyphrase = $this->seoable->getFocusKeyphrase() ?? 'none';
-        $title = $this->seoable->getSeoTitle()[0] ?? 'Untitled';
-        $content = $this->seoable->getSeoContent();
-
-        return <<< EOT
-        Focus Keyphrase:
-        {$focusKeyphrase}
-        Title:
-        {$title}
-        Content:
-        {$content}
-        EOT;
+        return 70;
     }
 }

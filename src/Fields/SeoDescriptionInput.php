@@ -5,7 +5,7 @@ namespace VanOns\FilamentSeo\Fields;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Utilities\Get;
-use VanOns\FilamentSeo\AI\Prompts\GeneratePageTitle;
+use VanOns\FilamentSeo\AI\Prompts\GenerateDescription;
 use VanOns\FilamentSeo\Concerns\HasMetadataGeneration;
 use VanOns\FilamentSeo\Concerns\HasRecommendedLength;
 use VanOns\FilamentSeo\Schemas\RecommendedLength;
@@ -44,7 +44,7 @@ class SeoDescriptionInput extends Textarea
             ->extraAttributes(function (Field $component) {
                 return $this->generateMetadataAlpineListener($component);
             })
-            ->afterLabel($this->generateMetadataAction(new GeneratePageTitle()));
+            ->afterLabel($this->generateMetadataAction(new GenerateDescription()));
     }
 
     public function fallbackField(?string $field): static

@@ -91,4 +91,5 @@ return [
     'count_characters' => ':count tekens',
     'use_ai' => 'Gebruik AI',
     'ai_generation_completed' => 'AI-generatie voltooid',
+    'ai_rate_limited' => 'Te veel AI-verzoeken. Probeer het over :seconds seconden opnieuw.',
 ];
