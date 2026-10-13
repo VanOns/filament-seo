@@ -1,10 +1,12 @@
-<p align="center"><img src="art/social-card.png" alt="Social card of Filament SEO"></p>
+<p align="center" class="filament-hidden"><img src="art/social-card.png" alt="Social card of Filament SEO"></p>
 
 # Filament SEO
 
-[![Tests](https://github.com/VanOns/filament-seo/actions/workflows/run-tests.yml/badge.svg)](https://github.com/VanOns/filament-seo/actions/workflows/run-tests.yml)
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/van-ons/filament-seo.svg)](https://packagist.org/packages/van-ons/filament-seo)
-[![License](https://img.shields.io/packagist/l/van-ons/filament-seo.svg)](LICENSE.md)
+[![Latest version on GitHub](https://img.shields.io/github/release/VanOns/filament-seo.svg?style=flat-square)](https://github.com/VanOns/filament-seo/releases)
+[![Total downloads](https://img.shields.io/packagist/dt/van-ons/filament-seo.svg?style=flat-square)](https://packagist.org/packages/van-ons/filament-seo)
+[![GitHub issues](https://img.shields.io/github/issues/VanOns/filament-seo?style=flat-square)](https://github.com/VanOns/filament-seo/issues)
+[![License](https://img.shields.io/github/license/VanOns/filament-seo?style=flat-square)](https://github.com/VanOns/filament-seo/blob/main/LICENSE.md)
+[![Plumb score](https://img.shields.io/badge/dynamic/regex?url=https%3A%2F%2Fplumbphp.dev%2Fbadges%2Fvan-ons%2Ffilament-seo%2Fcomposite.svg&search=%3Ctitle%3Eplumb%3A%5Cs%2A%28%5B%5E%3C%5D%2B%29%3C&replace=%241&label=plumb&style=flat-square)](https://plumbphp.dev/van-ons/filament-seo)
 
 Add SEO management to your Filament admin panel — meta tags for your models, made available in your app's layout.
 
