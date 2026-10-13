@@ -134,7 +134,7 @@ public function boot(): void
 {
     SitemapRegistry::register([
         Sitemap::fromQuery('pages', Page::published()),
-        Sitemap::fromModel('articles', Article::class),
+        Sitemap::fromQuery('articles', Article::published()),
         new Sitemap(
             slug: 'home',
             urls: collect([new SitemapUrl(url('/'))])
@@ -143,7 +143,9 @@ public function boot(): void
 }
 ```
 
-Sitemaps are available at `/sitemaps/{slug}.xml`. Disable via `.env`:
+`Sitemap::fromModel()` lists every row of the table, including drafts. Use `fromQuery()` with a scope when a model has unpublished records.
+
+Sitemaps are available at `/sitemap.xml` (index) and `/{slug}-sitemap.xml`. Disable via `.env`:
 
 ```dotenv
 SEO_SITEMAP_ENABLED=false

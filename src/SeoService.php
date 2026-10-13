@@ -157,7 +157,8 @@ class SeoService
                             $value = View::getSection("seo.{$name}", $value);
                         }
 
-                        return $key . '="' . $value . '"';
+                        // Inline @section values arrive pre-escaped by Blade, so skip double encoding
+                        return e($key) . '="' . e((string) $value, false) . '"';
                     })->implode(' ') . '>';
                 })
                 ->implode("\n")

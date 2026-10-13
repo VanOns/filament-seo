@@ -79,6 +79,7 @@ class SeoFields implements \VanOns\FilamentSeo\Contracts\SeoFields
         return TextInput::make($this->seoPrefix . 'canonical_url')
             ->label(__('filament-seo::seo.custom_url'))
             ->placeholder(__('https://example.com/page'))
+            ->url()
             ->hidden(fn (Get $get) => $get($this->seoPrefix . 'canonical') !== 'url')
             ->live(onBlur: true);
     }

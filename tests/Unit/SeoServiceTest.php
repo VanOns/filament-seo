@@ -126,3 +126,22 @@ it('canonical returns the seoable canonical url', function () {
 
     expect($service->canonical())->toBe('https://example.com/page');
 });
+
+it('renderMetaTags escapes attribute values', function () {
+    $service = makeService();
+    $service->setSeoable(new FakeSeoable(description: '"><script>alert(1)</script>'));
+    $service->merge(['keywords' => '"><img src=x onerror=alert(1)>']);
+
+    $html = $service->renderMetaTags()->toHtml();
+
+    expect($html)->not->toContain('<script>')
+        ->and($html)->not->toContain('<img')
+        ->and($html)->toContain('content="&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;"');
+});
+
+it('renderMetaTags does not double encode already escaped values', function () {
+    $service = makeService();
+    $service->setSeoable(new FakeSeoable(description: 'Fish &amp; Chips'));
+
+    expect($service->renderMetaTags()->toHtml())->toContain('content="Fish &amp; Chips"');
+});

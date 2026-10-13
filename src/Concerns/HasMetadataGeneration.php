@@ -28,8 +28,10 @@ trait HasMetadataGeneration
             return GenerateMetadata::make('generate_metadata_' . $component->getName())
                 ->seoable($record)
                 ->prompt($prompt)
-                ->onResponse(function (?Response $response) use ($component, $livewire) {
-                    if ($output = $response->structured['output'] ?? null) {
+                ->onResponse(function (?Response $response) use ($component, $livewire, $prompt) {
+                    $output = $prompt->sanitizeOutput((string) ($response?->structured['output'] ?? ''));
+
+                    if ($output !== '') {
                         $livewire->dispatch($this->generateMetadataEventName($component), [
                             'value' => $output,
                         ]);
