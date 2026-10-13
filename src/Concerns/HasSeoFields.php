@@ -127,6 +127,10 @@ trait HasSeoFields
 
     public function shouldBeInSitemap(): bool
     {
+        if (config('seo.sitemap.exclude_noindex', true) && $this->getNoindex()) {
+            return false;
+        }
+
         return $this->url() && !$this->getExcludeFromSitemap();
     }
 

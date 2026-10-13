@@ -149,6 +149,12 @@ Sitemaps are available at `/sitemaps/{slug}.xml`. Disable via `.env`:
 SEO_SITEMAP_ENABLED=false
 ```
 
+Instances set to `noindex` are left out of the sitemap. To keep them in:
+
+```dotenv
+SEO_SITEMAP_EXCLUDE_NOINDEX=false
+```
+
 ## Middleware
 
 The package registers middleware that adds `X-Robots-Tag: none` on non-production environments, preventing accidental indexing. No configuration required.

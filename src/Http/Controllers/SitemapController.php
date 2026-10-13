@@ -15,12 +15,21 @@ class SitemapController extends Controller
         ])->header('Content-Type', 'text/xml');
     }
 
-    public function show(string $sitemap, ?int $page = null): Response
+    public function show(string $sitemap, ?string $page = null): Response
     {
         $sitemap = SitemapRegistry::getSitemap($sitemap);
 
         abort_if(!$sitemap, 404);
-        abort_if($page === null && $sitemap->pages() > 1, 404);
+
+        if ($page === null) {
+            abort_if($sitemap->pages() > 1, 404);
+        } else {
+            $page = filter_var($page, FILTER_VALIDATE_INT, [
+                'options' => ['min_range' => 1, 'max_range' => $sitemap->pages()],
+            ]);
+
+            abort_if($page === false, 404);
+        }
 
         return response()->view('filament-seo::sitemap.show', [
             'sitemap' => $sitemap,
