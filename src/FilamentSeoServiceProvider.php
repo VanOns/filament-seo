@@ -74,9 +74,9 @@ class FilamentSeoServiceProvider extends ServiceProvider
 
     public function registerTranslations(): void
     {
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'filament-seo');
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'filament-seo');
         $this->publishes([
-            __DIR__ . '/../resources/lang' => $this->app->langPath('vendor/filament-seo'),
+            __DIR__ . '/../lang' => $this->app->langPath('vendor/filament-seo'),
         ], 'filament-seo-lang');
     }
 }
