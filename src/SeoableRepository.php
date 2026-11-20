@@ -29,14 +29,13 @@ class SeoableRepository
      */
     protected function getSeoableFromAttribute(Route $route): ?Seoable
     {
-        $parts = explode('@', $route->getActionName());
-        $controller = $parts[0];
-        $method = $parts[1] ?? '__invoke';
+        $controller = $route->getControllerClass();
 
-        if (!class_exists($controller)) {
+        if (!$controller || !class_exists($controller)) {
             return null;
         }
 
+        $method = explode('@', $route->getActionName())[1] ?? '__invoke';
         $reflection = new ReflectionMethod($controller, $method);
 
         $attribute = collect($reflection->getAttributes(Attributes\Seoable::class))->first()?->newInstance();
