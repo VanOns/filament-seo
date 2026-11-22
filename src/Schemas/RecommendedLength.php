@@ -19,6 +19,8 @@ class RecommendedLength implements Schema
 
     protected ?string $subject = null;
 
+    protected ?string $suffix = null;
+
     public static function make(): static
     {
         return app(static::class);
@@ -38,15 +40,25 @@ class RecommendedLength implements Schema
         return $this;
     }
 
+    public function suffix(?string $suffix): static
+    {
+        $this->suffix = $suffix;
+
+        return $this;
+    }
+
+    protected function length(): int
+    {
+        return strlen($this->subject) + strlen($this->suffix ?? '');
+    }
+
     protected function percentage(): float
     {
-        $length = strlen($this->subject);
-
         if (!$this->maxRecommendedLength) {
             return 0;
         }
 
-        return max($length / $this->maxRecommendedLength * 100, 0);
+        return max($this->length() / $this->maxRecommendedLength * 100, 0);
 
     }
 
@@ -74,8 +86,7 @@ class RecommendedLength implements Schema
 
     protected function text()
     {
-        $length = strlen($this->subject);
-        return Text::make(__('filament-seo::seo.count_characters', ['count' => "{$length} / {$this->maxRecommendedLength}"]));
+        return Text::make(__('filament-seo::seo.count_characters', ['count' => "{$this->length()} / {$this->maxRecommendedLength}"]));
     }
 
     public function schema(): array

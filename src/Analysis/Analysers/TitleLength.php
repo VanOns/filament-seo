@@ -6,6 +6,7 @@ use VanOns\FilamentSeo\Analysis\AnalyserInterface;
 use VanOns\FilamentSeo\Analysis\AnalysisResult;
 use VanOns\FilamentSeo\Analysis\AnalysisStatus;
 use VanOns\FilamentSeo\Contracts\Seoable;
+use VanOns\FilamentSeo\Contracts\SeoSettings;
 
 class TitleLength implements AnalyserInterface
 {
@@ -17,6 +18,11 @@ class TitleLength implements AnalyserInterface
     {
         $title = $record->getSeoTitle()[0] ?? null;
         $length = strlen($title);
+
+        if ($length > 0) {
+            $length += strlen(app(SeoSettings::class)->getSuffix() ?? '');
+        }
+
         $percentage = max($length / $this->maxRecommendedLength * 100, 0);
 
         return match(true) {

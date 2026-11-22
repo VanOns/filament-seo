@@ -20,12 +20,15 @@ class SeoTitleInput extends TextInput
 
     public function setUp(): void
     {
-        $this->suffix(app(SeoSettings::class)->getSuffix())
+        $suffix = app(SeoSettings::class)->getSuffix();
+
+        $this->suffix($suffix)
             ->live()
-            ->belowContent(function (?string $state, Get $get) {
+            ->belowContent(function (?string $state, Get $get) use ($suffix) {
                 return RecommendedLength::make()
                     ->maxRecommendedLength($this->maxRecommendedLength)
                     ->subject($state ?: $get($this->fallbackField))
+                    ->suffix($suffix)
                     ->schema();
             })
             ->placeholder(function (Get $get) {
