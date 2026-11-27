@@ -2,6 +2,26 @@
 
 All changes to this project will be documented in this file.
 
+## v2.4.0 - 2026-11-27
+
+### What's changed
+
+- chore: update CHANGELOG.md for v2.3.0 #69 (by @[github-actions[bot]](https://github.com/apps/github-actions))
+
+#### 🚀 Features
+
+- chore: move the translations to lang/ #72 (by @JesseAlaerds)
+
+#### 🐛 Bug fixes
+
+- fix: skip closure routes when resolving the seoable #75 (by @KianAcquoy)
+
+#### 🛠 Changes
+
+- chore(deps): bump release-drafter/release-drafter from 7.10.0 to 7.11.0 #77 (by @[dependabot[bot]](https://github.com/apps/dependabot))
+- chore(deps): bump peter-evans/create-pull-request from 8.1.2 to 8.1.3 #78 (by @[dependabot[bot]](https://github.com/apps/dependabot))
+- chore(deps): bump peter-evans/create-pull-request from 8.1.1 to 8.1.2 #73 (by @[dependabot[bot]](https://github.com/apps/dependabot))
+
 ## v2.3.0 - 2026-10-13
 
 ### What's changed
