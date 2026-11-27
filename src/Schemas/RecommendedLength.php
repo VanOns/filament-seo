@@ -49,7 +49,10 @@ class RecommendedLength implements Schema
 
     protected function length(): int
     {
-        return strlen($this->subject) + strlen($this->suffix ?? '');
+        $length = mb_strlen($this->subject ?? '');
+
+        // The suffix only counts once there is a subject to append it to.
+        return $length > 0 ? $length + mb_strlen($this->suffix ?? '') : 0;
     }
 
     protected function percentage(): float

@@ -16,11 +16,11 @@ class TitleLength implements AnalyserInterface
 
     public function analyse(Seoable $record): ?AnalysisResult
     {
-        $title = $record->getSeoTitle()[0] ?? null;
-        $length = strlen($title);
+        $title = $record->getSeoTitle()[0] ?? '';
+        $length = mb_strlen($title);
 
         if ($length > 0) {
-            $length += strlen(app(SeoSettings::class)->getSuffix() ?? '');
+            $length += mb_strlen(app(SeoSettings::class)->getSuffix() ?? '');
         }
 
         $percentage = max($length / $this->maxRecommendedLength * 100, 0);

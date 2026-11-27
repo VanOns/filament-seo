@@ -30,3 +30,21 @@ it('flags a title as over the limit once the suffix is included', function () {
 
     expect($percentage)->toBeGreaterThan(100);
 });
+
+it('does not count the suffix when the subject is empty', function () {
+    expect(recommendedLength('', ' - My Site', 70))->toBe(0);
+});
+
+it('does not count the suffix when the subject is null', function () {
+    $instance = RecommendedLength::make()
+        ->maxRecommendedLength(70)
+        ->subject(null)
+        ->suffix(' - My Site');
+
+    expect((new ReflectionMethod($instance, 'length'))->invoke($instance))->toBe(0);
+});
+
+it('counts multibyte characters as single characters', function () {
+    expect(recommendedLength('café', null, 70))->toBe(4)
+        ->and(recommendedLength('😀', null, 70))->toBe(1);
+});

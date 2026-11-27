@@ -15,8 +15,8 @@ class DescriptionLength implements AnalyserInterface
 
     public function analyse(Seoable $record): ?AnalysisResult
     {
-        $description = $record->getSeoDescription() ?? null;
-        $length = strlen($description);
+        $description = $record->getSeoDescription() ?? '';
+        $length = mb_strlen($description);
         $percentage = max($length / $this->maxRecommendedLength * 100, 0);
 
         return match(true) {

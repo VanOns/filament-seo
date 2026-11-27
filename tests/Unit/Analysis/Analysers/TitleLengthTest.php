@@ -74,3 +74,10 @@ it('still fails when title is missing even with a suffix configured', function (
 
     expect($result->status)->toBe(AnalysisStatus::FAILED);
 });
+
+it('counts multibyte characters as single characters', function () {
+    // 70 multibyte chars = 140 bytes; must still be within the limit.
+    $result = (new TitleLength())->analyse(new FakeSeoable(title: str_repeat('é', 70)));
+
+    expect($result->status)->toBe(AnalysisStatus::PASSED);
+});
