@@ -25,7 +25,7 @@ trait HasRecommendedLength
             return null;
         }
 
-        $length = strlen($state);
+        $length = mb_strlen($state ?? '');
         $percentage = max($length / $this->maxRecommendedLength * 100, 0);
         $color = match(true) {
             $percentage > 0 && $percentage <= 100 => Color::Green,
